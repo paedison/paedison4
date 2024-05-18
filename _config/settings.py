@@ -54,6 +54,9 @@ INSTALLED_APPS = [
     'admin_honeypot',
 
     'a_posts',
+    'a_users',
+
+    'django_cleanup.apps.CleanupConfig',
 ]
 
 MIDDLEWARE = [
