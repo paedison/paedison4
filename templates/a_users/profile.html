@@ -1,141 +1,67 @@
 {% extends '_layouts/_d.html' %}
 
 {% block content %}
-<div id="profile" class="flex flex-col items-center">
-
-    <div class="w-full md:w-[36rem] lg:w-[50rem]">
-        <div class="card p-6">
-            <div class="text-center flex flex-col items-center">
-                <img class="w-36 h-36 rounded-full object-cover mb-4" src="{{ profile.image.url }}" />
-                <div class="text-center max-w-md">
-                    <h1>{{ profile.realname }}</h1>
-                    <div class="text-gray-400 mb-2 -mt-3">@{{ profile.user.username }}</div>
-                    <div class="flex items-center justify-center mx-auto">
-                        <img class="object-cover h-6 mr-1 opacity-60" src="https://img.icons8.com/material-outlined/50/000000/marker.png">
-                        {{ profile.location }}
+    <div id="profile" class="flex flex-col items-center">
+        <div class="w-full md:w-[36rem] lg:w-[50rem]">
+            <div x-data="{ modal_open: false }" class="card p-6">
+                <div class="text-center flex flex-col items-center">
+                    <img class="w-36 h-36 rounded-full object-cover mb-4" src="{{ profile.avatar }}" />
+                    <div class="text-center max-w-md">
+                        <h1>{{ profile.name }}</h1>
+                        <div class="text-gray-400 mb-2 -mt-3">@{{ profile.user.username }}</div>
+                        <div class="flex items-center justify-center mx-auto">
+                            <img class="object-cover h-6 mr-1 opacity-60" src="https://img.icons8.com/material-outlined/50/000000/marker.png">
+                            {{ profile.location|default:'Planet Earth' }}
+                        </div>
+                        <div class="my-8">
+                            {{ profile.bio|default:'Professional procrastinator' }}
+                        </div>
                     </div>
-                    <div class="my-8">
-                        {{ profile.bio }}
-                    </div>
+                </div>
 
+                <div class="absolute bottom-2 right-2 px-4 py-2 mb-3">
+                    <a @click="modal_open = true"
+                       class="flex cursor-pointer items-center gap-2 bg-gray-200 hover:bg-indigo-700 text-white rounded-full h-14 w-14 justify-center">
+                        <img class="h-6 m-auto lg:m-0"
+                             src="https://img.icons8.com/external-anggara-glyph-anggara-putra/32/ffffff/external-edit-user-interface-anggara-glyph-anggara-putra.png">
+                    </a>
+                </div>
+
+                <div class="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true"
+                     x-show="modal_open" x-cloak>
+                    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+                    <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+                        <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                            <div class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+                                <div @click.away="modal_open = false" class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                                    {% include 'a_inbox/form_new_message.html' with recipient=profile.user %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div id="tabs" class="flex justify-center my-4 gap-2" >
-        <a class="tab selected">Latest</a>
-        <a class="tab">Top Posts</a>
-        <a class="tab">Top Comments</a>
-        <a class="tab">Liked Posts</a>
-    </div>
-
-    <div id="tab-contents" class="w-full flex flex-col items-center">
-
-        <div class="grid place-items-start gap-x-8 max-w-xl mx-auto lg:grid-cols-2 lg:max-w-5xl xl:grid-cols-3 xl:max-w-7xl">
-
-        <article class="card">
-            <div class="flex items-center justify-between px-4 h-14">
-                <h3 class="text-start leading-5 mr-1">Little Jedi</h3>
-                <div class="text-sm text-gray-400 truncate">flickr<a href="" class="hover:underline ml-1" target="blank">@John Doe</a></div>
-            </div>
-            <figure>
-                <a href=""><img class="w-full" src="https://live.staticflickr.com/65535/50618365686_36f887ab88_c.jpg"></a>
-            </figure>
-            <div class="p-4 pb-2">
-                <a class="flex items-center gap-1 mb-4" href="">
-                    <img class="w-8 h-8 object-cover rounded-full" src="https://img.icons8.com/small/96/A9A9A9/happy.png">
-                    <span class="font-bold hover:underline">Lisa</span>
-                    <span class="text-sm text-gray-400">@lisasimpson</span>
-                </a>
-                <p class="text-5xl mb-10 px-4 font1">Jedi Kitty protects the street</p>
-                <div class="flex items-center gap-2 text-sm mb-5 flex-wrap">
-                    <a class="bg-gray-200 rounded-full px-3 py-1 hover:bg-gray-800 hover:text-white" href="">Animals</a>
-                    <a class="bg-gray-200 rounded-full px-3 py-1 hover:bg-gray-800 hover:text-white" href="">Black & White</a>
-                </div>
-                <div class="flex items-center justify-between text-sm px-2">
-                    <a class="font-bold hover:underline" href="">Comments<span class="font-light text-gray-500 ml-2">3</span></a>
-                    <div class="flex items-center gap-4 [&>a:hover]:underline">
-                        <div class="flex items-center gap-1">
-                            <img class="w-5 -mt-1" src="https://img.icons8.com/small/24/000000/fire-heart.png">1</div>
-                        <a href="">Like</a>
-                        <a href="">Edit</a>
-                        <a href="">Delete</a>
-                    </div>
-                </div>
-            </div>
-
-        </article>
-
-        <article class="card">
-            <div class="flex items-center justify-between px-4 h-14">
-                <h3 class="text-start leading-5 mr-1">Little Jedi</h3>
-                <div class="text-sm text-gray-400 truncate">flickr<a href="" class="hover:underline ml-1" target="blank">@John Doe</a></div>
-            </div>
-            <figure>
-                <a href=""><img class="w-full" src="https://live.staticflickr.com/65535/50618365686_36f887ab88_c.jpg"></a>
-            </figure>
-            <div class="p-4 pb-2">
-                <a class="flex items-center gap-1 mb-4" href="">
-                    <img class="w-8 h-8 object-cover rounded-full" src="https://img.icons8.com/small/96/A9A9A9/happy.png">
-                    <span class="font-bold hover:underline">Lisa</span>
-                    <span class="text-sm text-gray-400">@lisasimpson</span>
-                </a>
-                <p class="text-5xl mb-10 px-4 font1">Jedi Kitty protects the street</p>
-                <div class="flex items-center gap-2 text-sm mb-5 flex-wrap">
-                    <a class="bg-gray-200 rounded-full px-3 py-1 hover:bg-gray-800 hover:text-white" href="">Animals</a>
-                    <a class="bg-gray-200 rounded-full px-3 py-1 hover:bg-gray-800 hover:text-white" href="">Black & White</a>
-                </div>
-                <div class="flex items-center justify-between text-sm px-2">
-                    <a class="font-bold hover:underline" href="">Comments<span class="font-light text-gray-500 ml-2">3</span></a>
-                    <div class="flex items-center gap-4 [&>a:hover]:underline">
-                        <div class="flex items-center gap-1">
-                            <img class="w-5 -mt-1" src="https://img.icons8.com/small/24/000000/fire-heart.png">1</div>
-                        <a href="">Like</a>
-                        <a href="">Edit</a>
-                        <a href="">Delete</a>
-                    </div>
-                </div>
-            </div>
-
-        </article>
-
-        <article class="card">
-            <div class="flex items-center justify-between px-4 h-14">
-                <h3 class="text-start leading-5 mr-1">Little Jedi</h3>
-                <div class="text-sm text-gray-400 truncate">flickr<a href="" class="hover:underline ml-1" target="blank">@John Doe</a></div>
-            </div>
-            <figure>
-                <a href=""><img class="w-full" src="https://live.staticflickr.com/65535/50618365686_36f887ab88_c.jpg"></a>
-            </figure>
-            <div class="p-4 pb-2">
-                <a class="flex items-center gap-1 mb-4" href="">
-                    <img class="w-8 h-8 object-cover rounded-full" src="https://img.icons8.com/small/96/A9A9A9/happy.png">
-                    <span class="font-bold hover:underline">Lisa</span>
-                    <span class="text-sm text-gray-400">@lisasimpson</span>
-                </a>
-                <p class="text-5xl mb-10 px-4 font1">Jedi Kitty protects the street</p>
-                <div class="flex items-center gap-2 text-sm mb-5 flex-wrap">
-                    <a class="bg-gray-200 rounded-full px-3 py-1 hover:bg-gray-800 hover:text-white" href="">Animals</a>
-                    <a class="bg-gray-200 rounded-full px-3 py-1 hover:bg-gray-800 hover:text-white" href="">Black & White</a>
-                </div>
-                <div class="flex items-center justify-between text-sm px-2">
-                    <a class="font-bold hover:underline" href="">Comments<span class="font-light text-gray-500 ml-2">3</span></a>
-                    <div class="flex items-center gap-4 [&>a:hover]:underline">
-                        <div class="flex items-center gap-1">
-                            <img class="w-5 -mt-1" src="https://img.icons8.com/small/24/000000/fire-heart.png">1</div>
-                        <a href="">Like</a>
-                        <a href="">Edit</a>
-                        <a href="">Delete</a>
-                    </div>
-                </div>
-            </div>
-
-        </article>
-
+        <div id="tabs" class="flex justify-center my-4 gap-2"
+             _="on htmx:afterOnLoad take .selected for event.target"
+             hx-target="#tab-contents" hx-swap="innerHTML">
+            <a hx-get="{% url 'user-profile' profile.user.username %}" class="tab selected">Latest</a>
+            <a hx-get="{% url 'user-profile' profile.user.username %}?top-posts" class="tab">Top Posts</a>
+            <a hx-get="{% url 'user-profile' profile.user.username %}?top-comments" class="tab">Top Comments</a>
+            <a hx-get="{% url 'user-profile' profile.user.username %}?liked-posts" class="tab">Liked Posts</a>
         </div>
 
+        <div id="tab-contents" class="w-full flex flex-col items-center">
+            <div class="grid place-items-start gap-x-8 max-w-xl mx-auto max-w-xl
+                    {% if posts.count >= 2 %}lg:grid-cols-2 lg:max-w-5xl{% endif %}
+                    {% if posts.count >= 3 %}xl:grid-cols-3 xl:max-w-7xl{% endif %}">
+                {% for post in posts %}
+                    {% include 'a_posts/post.html' %}
+                {% empty %}
+                    <div class="w-full text-center mt-10">No posts just yet</div>
+                {% endfor %}
+            </div>
+        </div>
     </div>
-
-</div>
 {% endblock content %}

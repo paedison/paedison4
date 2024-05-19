@@ -27,14 +27,26 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
 
     path('', post_views.home_view, name='home'),
-    path('category/<tag>/', post_views.home_view, name='category'),
+    path('post/category/<tag>/', post_views.home_view, name='category'),
     path('post/create/', post_views.post_create_view, name='post-create'),
     path('post/delete/<pk>/', post_views.post_delete_view, name='post-delete'),
     path('post/edit/<pk>/', post_views.post_edit_view, name='post-edit'),
     path('post/<pk>/', post_views.post_page_view, name='post'),
+    path('post/like/<pk>/', post_views.like_post, name='like-post'),
+    path('post/comment/sent/<pk>/', post_views.comment_sent, name='comment-sent'),
+    path('post/comment/delete/<pk>/', post_views.comment_delete_view, name='comment-delete'),
+    path('post/comment/like/<pk>/', post_views.like_comment, name='like-comment'),
+    path('post/reply/sent/<pk>/', post_views.reply_sent, name='reply-sent'),
+    path('post/reply/delete/<pk>/', post_views.reply_delete_view, name='reply-delete'),
+    path('post/reply/like/<pk>/', post_views.like_reply, name='like-reply'),
 
     path('profile/', user_views.profile_view, name='profile'),
-    path('profile/edit', user_views.profile_edit_view, name='profile-edit'),
+    path('profile/user/<username>/', user_views.profile_view, name='user-profile'),
+    path('profile/edit/', user_views.profile_edit_view, name='profile-edit'),
+    path('profile/delete/', user_views.profile_delete_view, name='profile-delete'),
+    path('profile/onboarding/', user_views.profile_edit_view, name='profile-onboarding'),
+
+    path('inbox/', include('a_inbox.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
