@@ -1,0 +1,19 @@
+{
+  "name": "node",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "tailwind": "tailwind build -i ../static/css/input.css -o ../static/css/output.css --watch",
+    "minify": "cleancss ../static/css/output.css -o ../static/css/output.min.css"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "tailwindcss": "^3.4.3"
+  },
+  "dependencies": {
+    "clean-css-cli": "^5.6.3"
+  }
+}
