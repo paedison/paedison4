@@ -8,10 +8,11 @@ from a_psat import models as psat_models
 
 
 def index_view(request, tag=None):
-    problems = psat_models.Problem.objects.prefetch_related('comments')
+    problems = psat_models.Problem.objects.prefetch_related(
+        'like_users', 'rate_users', 'solve_users')
 
     if tag:
-        problems = problems.filter(tags=tag)
+        problems = problems.problemtag_set()
         tag = get_object_or_404(psat_models.ProblemTag, tags=tag)
     else:
         problems = problems.all()
@@ -35,12 +36,12 @@ def index_view(request, tag=None):
 
 @login_required
 def like_problem(request, pk):
-    problem: psat_models.Problem = get_object_or_404(psat_models.Problem, pk=pk)
-    user_exists = problem.likes.filter(username=request.user.username).exists()
+    problem = get_object_or_404(psat_models.Problem, pk=pk)
+    user_exists = problem.problemlike_set.filter(user=request.user).exists()
     if user_exists:
-        problem.likes.remove(request.user)
+        problem.like_users.remove(request.user)
     else:
-        problem.likes.add(request.user)
+        problem.like_users.add(request.user)
     icon_like = icon_set.ICON_LIKE[f'{not user_exists}']
     context = {
         'problem': problem,
@@ -51,13 +52,17 @@ def like_problem(request, pk):
 
 @login_required
 def rate_problem(request, pk):
-    rating = request.POST.get('rating')
-    problem: psat_models.Problem = get_object_or_404(psat_models.Problem, pk=pk)
-    rate = get_object_or_404(psat_models.ProblemRate, problem_id=pk, user=request.user)
-    if rate:
-        rate.rating = rating
-        rate.save()
-    else:
-        problem.rates.add(request.user, problem)
-    icon_rate = icon_set.ICON_RATE[f'star{rating}']
-    return HttpResponse(icon_rate)
+    if request.method == 'POST':
+        rating = request.POST.get('rating')
+        problem = get_object_or_404(psat_models.Problem, pk=pk)
+        user_exists = problem.problemrate_set.filter(user=request.user).exists()
+        print(user_exists)
+        if user_exists:
+            problem_rate = psat_models.ProblemRate.objects.get(user=request.user, problem=problem)
+            problem_rate.rating = rating
+            problem_rate.save()
+        else:
+            test = problem.rate_users.add(request.user, through_defaults={'rating': rating})
+            print(test)
+        icon_rate = icon_set.ICON_RATE[f'star{rating}']
+        return HttpResponse(icon_rate)

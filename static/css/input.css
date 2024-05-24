@@ -234,7 +234,7 @@ form[action="/accounts/signup/"] ul.errorlist {
     @apply text-red-600 m-0;
 }
 .solid_star {
-    @apply text-yellow-400 m-0;
+    @apply text-yellow-300 m-0;
 }
 .answer_correct {
     @apply text-green-600 m-0;
@@ -265,11 +265,11 @@ form[action="/accounts/signup/"] ul.errorlist {
     text-shadow: 0 0 0 #ddd; /* 새 이모지 색상 부여 */
 }
 .rate_button label:hover{
-    text-shadow: 0 0 0 #f1c40f !important; /* 마우스 호버 */
+    text-shadow: 0 0 0 #fde047 !important; /* 마우스 호버 */
 }
 .rate_button label:hover ~ label{
-    text-shadow: 0 0 0 #f1c40f !important; /* 마우스 호버 뒤에오는 이모지들 */
+    text-shadow: 0 0 0 #fde047 !important; /* 마우스 호버 뒤에오는 이모지들 */
 }
 .rate_button input[type=radio]:checked ~ label{
-    text-shadow: 0 0 0 #f1c40f; /* 마우스 클릭 체크 */
+    text-shadow: 0 0 0 #fde047; /* 마우스 클릭 체크 */
 }

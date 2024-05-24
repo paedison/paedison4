@@ -25,14 +25,14 @@ class Problem(models.Model):
     question = models.TextField()
     data = models.TextField()
 
-    opens = models.ManyToManyField(User, related_name='opened_problems', through='ProblemOpen')
-    likes = models.ManyToManyField(User, related_name='liked_problems', through='ProblemLike')
-    rates = models.ManyToManyField(User, related_name='rated_problems', through='ProblemRate')
-    solves = models.ManyToManyField(User, related_name='solved_problems', through='ProblemSolve')
-    memos = models.ManyToManyField(User, related_name='memoed_problems', through='ProblemMemo')
-    tags = models.ManyToManyField(User, related_name='tagged_problems', through='ProblemTag')
-    comments = models.ManyToManyField(User, related_name='commented_problems', through='ProblemComment')
-    collections = models.ManyToManyField('Collection', related_name='collected_problems', through='ProblemCollection')
+    open_users = models.ManyToManyField(User, related_name='opened_problems', through='ProblemOpen')
+    like_users = models.ManyToManyField(User, related_name='liked_problems', through='ProblemLike')
+    rate_users = models.ManyToManyField(User, related_name='rated_problems', through='ProblemRate')
+    solve_users = models.ManyToManyField(User, related_name='solved_problems', through='ProblemSolve')
+    memo_users = models.ManyToManyField(User, related_name='memoed_problems', through='ProblemMemo')
+    tag_users = models.ManyToManyField(User, related_name='tagged_problems', through='ProblemTag')
+    comment_users = models.ManyToManyField(User, related_name='commented_problems', through='ProblemComment')
+    collection_users = models.ManyToManyField('Collection', related_name='collected_problems', through='ProblemCollection')
 
     class Meta:
         ordering = ['-year', 'id']

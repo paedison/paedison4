@@ -3,7 +3,7 @@
 
 <rateproblem x-data="{ modalOpen: false }">
     {% if user.is_authenticated %}
-        <button id="rating{{ problem.id }}" @click="modalOpen = true">{{ icon_rate|safe }}</button>
+        <button id="problemRate{{ problem.id }}" @click="modalOpen = true">{{ icon_rate|safe }}</button>
         <modal class="fixed inset-0 px-2 z-20 overflow-hidden flex items-center justify-center"
              x-show="modalOpen">
             <modaloverlayer class="absolute inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
@@ -31,13 +31,14 @@
                 </modalheader>
                 <modalbody class="p-4 text-center text-base">
                     <form class="rate_button"
-                          hx-target="#rating{{ problem.id }}" type="button">
+                          hx-target="#problemRate{{ problem.id }}" type="button">
                         <fieldset>
                             {% for i in '12345' %}
-                                <input type="radio" name="rating" id="rating{{ i }}" value="{{ i|subtract:6 }}"
+                                <input id="rating{{ problem.id }}-{{ i }}"
+                                       type="radio" name="rating" value="{{ i|subtract:6 }}"
                                        @click="modalOpen = false"
                                        hx-post="{% url 'psat:rate-problem' problem.id %}">
-                                <label for="rating{{ i }}"><i class="fa fa-star cursor-pointer"></i></label>
+                                <label for="rating{{ problem.id }}-{{ i }}"><i class="fa fa-star cursor-pointer"></i></label>
                             {% endfor %}
                         </fieldset>
                     </form>
