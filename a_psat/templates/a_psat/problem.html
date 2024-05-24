@@ -1,0 +1,51 @@
+{% load static %}
+{% load psat_icon %}
+
+<article class="card">
+    {% with p=problem %}
+        <div class="grid bg-gray-700 text-white bg-cover z-10 relative">
+            <div class="col-start-1 row-start-1 bg-opacity-40 w-full h-full text-right text-4xl pe-4
+                {% if p.sub == '언어' %}bg-blue-600
+                {% elif p.sub == '자료' %}bg-emerald-600
+                {% elif p.sub == '상황' %}bg-amber-600{% endif %}">
+            PSAT
+            </div>
+            <div class="col-start-1 row-start-1 p-4">
+                <a class="flex items-center gap-1" href="">
+                    <span class="font-bold hover:underline">{{ p.year }}년 {{ p.exam }} {{ p.subject }} {{ p.number }}번</span>
+                </a>
+            </div>
+        </div>
+        <figure>
+            <a href="">
+                <img class="w-full h-[200px] object-cover object-top" src="{{ p.images.name1 }}" alt="{{ p.images.tag1 }}">
+            </a>
+        </figure>
+        <div class="p-4 pb-2">
+{#        <p class="text-5xl mb-10 px-4 font1">{{ problem.body }}</p>#}
+{#        <div class="flex items-center gap-2 text-sm mb-5 flex-wrap">#}
+{#            {% for tag in problem.tags.all %}#}
+{#                <a href="{% url 'category' tag.slug %}"#}
+{#                   class="bg-gray-200 rounded-full px-3 py-1 hover:bg-gray-800 hover:text-white">{{ tag }}</a>#}
+{#            {% endfor %}#}
+{#        </div>#}
+    {% endwith %}
+        <div class="flex items-center justify-between text-sm px-2">
+            <a class="font-bold hover:underline" href="">
+                {% if problem.comments.count %}
+                    Comments
+                    <span id="commentsCount-{{ problem.id }}"
+                          class="font-light text-gray-500 ml-1">{{ problem.comments.count }}</span>
+                {% else %}
+                    {% if user.is_authenticated %}Add comment{% endif %}
+                {% endif %}
+            </a>
+            <div class="flex items-center gap-2 [&>a:hover]:underline">
+                {% tag_icon_like user problem %}
+                {% tag_icon_rate user problem %}
+{#                {% include 'a_psat/snippets/rates.html' %}#}
+                {% include 'a_psat/snippets/solves.html' %}
+            </div>
+        </div>
+    </div>
+</article>

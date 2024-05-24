@@ -1,0 +1,14 @@
+<div aria-label="Like Icon">
+    {% if user.is_authenticated %}
+        <a class="cursor-pointer" hx-target="closest div" hx-swap="outerHTML"
+           hx-get="{% url 'psat:like-problem' problem.id %}">
+            {{ icon_like|safe }}
+            {{ problem.likes.count|default_if_none:0 }}
+        </a>
+    {% else %}
+        <a href="{% url 'account_login' %}">
+            {{ icon_like|safe }}
+            {{ problem.likes.count|default_if_none:0 }}
+        </a>
+    {% endif %}
+</div>

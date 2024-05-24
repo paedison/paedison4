@@ -59,15 +59,23 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'admin_honeypot',
     'django_htmx',
+    'taggit',
+    'debug_toolbar',
+    'ckeditor',
+    'ckeditor_uploader',
+    'template_partials',
 
     'a_posts',
     'a_users',
     'a_inbox',
+    'a_psat',
+    'a_common',
 
     'django_cleanup.apps.CleanupConfig',
 ]
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -189,3 +197,45 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_BLACKLIST = [
     'admin', 'accounts', 'profile', 'category', 'post', 'inbox', 'check_in_as_boss',
 ]
+
+
+# CkEditor Settings
+if ENVIRONMENT == 'production' or POSTGRES_LOCALLY:
+    CKEDITOR_BASEPATH = "/staticfiles/vendor/ckeditor/ckeditor/"
+else:
+    CKEDITOR_BASEPATH = "/static/vendor/ckeditor/ckeditor/"
+CKEDITOR_UPLOAD_PATH = 'uploads/'
+CKEDITOR_IMAGE_BACKEND = 'pillow'
+X_FRAME_OPTIONS = "SAMEORIGIN"
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': [
+            ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript'],
+            ['NumberedList', 'BulletedList', 'Blockquote', 'Code'],
+            ['Link', 'Unlink', 'Anchor'],
+            ['Image', 'Embed', 'Table', 'HorizontalRule', 'SpecialChar'],
+            ['Styles', 'Format', 'Font', 'FontSize'],
+            ['TextColor', 'BGColor'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+            ['RemoveFormat', 'Source'],
+        ],
+        'width': 'auto',
+        "removePlugins": "stylesheetparser",
+        'extraPlugins': ','.join([
+            'autolink',
+            'autoembed',
+            'embed',
+        ]),
+        'embed_provider': 'ckeditor.iframe.ly/api/oembed?url={url}&callback={callback}',
+    },
+    'minimal': {
+        'toolbar': [
+            ['Bold', 'Italic', 'Underline', 'Strike'],
+            ['NumberedList', 'BulletedList', 'Outdent', 'Indent'],
+        ],
+        'width': 'auto',
+        'height': 100,
+        "removePlugins": "stylesheetparser",
+    },
+}

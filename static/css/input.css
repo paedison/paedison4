@@ -23,31 +23,31 @@ h3 {
 .font1 {
     font-family: var(--font1);
 }
-.button, button, [type='submit'], [type='button'] {
-    display: inline-flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    text-align: center;
-    border-radius: 0.5rem;
-    cursor: pointer;
-    padding: 0 1rem;
-    min-height: 3.3rem;
-    font-weight: 600;
-    box-shadow: 0 4px 3px rgba(0, 0, 0, 0.1);
-    transition-property: transform;
-    transition-duration: .2s;
-    color: white;
-    background-color: var(--primary);
-    width: fit-content;
-}
-.button:hover, button:hover, [type='submit']:hover, [type='button']:hover {
-    background-color: var(--primary-hover);
-}
-.button:active, button:active, [type='submit']:active, [type='button']:active {
-    transform: scale(0.95);
-}
+/*.button, button, [type='submit'], [type='button'] {*/
+/*    display: inline-flex;*/
+/*    flex-wrap: wrap;*/
+/*    align-items: center;*/
+/*    justify-content: center;*/
+/*    flex-shrink: 0;*/
+/*    text-align: center;*/
+/*    border-radius: 0.5rem;*/
+/*    cursor: pointer;*/
+/*    padding: 0 1rem;*/
+/*    min-height: 3.3rem;*/
+/*    font-weight: 600;*/
+/*    box-shadow: 0 4px 3px rgba(0, 0, 0, 0.1);*/
+/*    transition-property: transform;*/
+/*    transition-duration: .2s;*/
+/*    color: white;*/
+/*    background-color: var(--primary);*/
+/*    width: fit-content;*/
+/*}*/
+/*.button:hover, button:hover, [type='submit']:hover, [type='button']:hover {*/
+/*    background-color: var(--primary-hover);*/
+/*}*/
+/*.button:active, button:active, [type='submit']:active, [type='button']:active {*/
+/*    transform: scale(0.95);*/
+/*}*/
 .secondaryAction {
     background-color: white;
     color: rgba(0, 0, 0, 0.6);
@@ -106,9 +106,9 @@ label, input {
 form p label {
     width: 7rem;
     }
-label {
-    margin: 6px 0 3px;
-}
+/*label {*/
+/*    margin: 6px 0 3px;*/
+/*}*/
 input, textarea {
     width: 100%;
 }
@@ -228,4 +228,48 @@ form[action="/accounts/signup/"] ul {
 }
 form[action="/accounts/signup/"] ul.errorlist {
     @apply block
+}
+
+.solid_heart {
+    @apply text-red-600 m-0;
+}
+.solid_star {
+    @apply text-yellow-400 m-0;
+}
+.answer_correct {
+    @apply text-green-600 m-0;
+}
+.answer_wrong {
+    @apply text-red-600 m-0;
+}
+.empty_heart, .empty_star, .answer_none {
+    @apply text-gray-300 m-0 cursor-pointer;
+}
+
+
+/* rate button */
+.rate_button fieldset{
+    display: inline-block; /* 하위 별점 이미지들이 있는 영역만 자리를 차지함.*/
+    direction: rtl; /* 이모지 순서 반전 */
+    border: 0; /* 필드셋 테두리 제거 */
+    cursor: pointer;
+}
+.rate_button fieldset legend{
+    text-align: left;
+}
+.rate_button input[type=radio]{
+    display: none; /* 라디오박스 감춤 */
+}
+.rate_button label{
+    color: transparent; /* 기존 이모지 컬러 제거 */
+    text-shadow: 0 0 0 #ddd; /* 새 이모지 색상 부여 */
+}
+.rate_button label:hover{
+    text-shadow: 0 0 0 #f1c40f !important; /* 마우스 호버 */
+}
+.rate_button label:hover ~ label{
+    text-shadow: 0 0 0 #f1c40f !important; /* 마우스 호버 뒤에오는 이모지들 */
+}
+.rate_button input[type=radio]:checked ~ label{
+    text-shadow: 0 0 0 #f1c40f; /* 마우스 클릭 체크 */
 }

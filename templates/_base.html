@@ -16,15 +16,29 @@
     {% else %}
         <link href="{% static 'css/output.css' %}" rel="stylesheet">
     {% endif %}
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-    <script src="https://unpkg.com/htmx.org@1.9.12"></script>
-    <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'vendor/fontawesome-free/css/all.min.css' %}"/>
+    <script src="{% static 'vendor/alpine/alpine@3.14.0.min.js' %}" defer></script>
+    <script src="{% static 'vendor/htmx/htmx@1.9.12.min.js' %}"></script>
+    <script src="{% static 'vendor/hyperscript/hyperscript@0.9.12.min.js' %}"></script>
+    <script src="{% static 'vendor/flowbite/flowbite.min.js' %}"></script>
+    <script defer src="{% static 'js/common.js' %}"></script>
 </head>
-<body class="bg-gray-100">
+<body class="bg-gray-100"
+      hx-ext="debug, event-header"
+{#      hx-ext="event-header"#}
+      hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
 
     {% include '_includes/_messages.html' %}
     {% include '_includes/_header.html' %}
     {% block layout %}{% endblock %}
-
+    <script>
+        window.addEventListener("scroll", function() {
+            const distance = window.scrollY
+            const herotext = document.querySelector(".herotext-anim");
+            const opacity = 1 - distance / (window.innerHeight * 0.15);
+            herotext.style.transform = `translateY(${distance * 0.7}px)`;
+            herotext.style.opacity = opacity;
+        });
+    </script>
 </body>
 </html>

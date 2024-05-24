@@ -3,10 +3,13 @@ module.exports = {
   content: [
       '../templates/**/*.html',
       '../**/templates/**/*.html',
-      '../**/forms.py'
+      '../**/forms.py',
+      './node_modules/flowbite/**/*.js',
   ],
   theme: {
     extend: {},
   },
-  plugins: [],
+  plugins: [
+      require('flowbite/plugin'),
+  ],
 }

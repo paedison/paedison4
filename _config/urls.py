@@ -22,9 +22,12 @@ from a_posts import views as post_views
 from a_users import views as user_views
 
 urlpatterns = [
+    path("__debug__/", include("debug_toolbar.urls")),
+
     path('admin/', include('admin_honeypot.urls', namespace='admin_honeypot')),
     path('check_in_as_boss/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
+    path('psat/', include('a_psat.urls')),
 
     path('', post_views.home_view, name='home'),
     path('post/category/<tag>/', post_views.home_view, name='category'),
