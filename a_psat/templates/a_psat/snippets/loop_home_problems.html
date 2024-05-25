@@ -1,7 +1,10 @@
 <fade-in class="opacity-0" _="on load transition my opacity to 1 over 0.2 seconds">
     {% for problem in problems %}{% include 'a_psat/problem.html' %}{% endfor %}
 
+    <div id="filterPage" hx-swap-oob="#filterPage outerHTML">
+        {% include 'a_psat/snippets/page_filter.html' %}
+    </div>
+
     <div hx-trigger="revealed" hx-target="this" hx-swap="outerHTML"
-     hx-get="{% if tag %}{% url 'category' tag.slug %}{% else %}
-            {% url 'psat:index' %}{% endif %}?page={{ page|add:1 }}"></div>
+         hx-get="{{ next_path }}"></div>
 </fade-in>

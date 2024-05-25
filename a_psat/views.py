@@ -4,21 +4,27 @@ from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 
 from a_common.constants import icon_set
-from a_psat import models as psat_models
+from a_psat import models as psat_models, utils
+
+
+def page_filter(request):
+    page = int(request.GET.get('page', 1))
+    elided_page_range = utils.get_elided_page_range(request)
+    context = {
+        'page': page,
+        'elided_page_range': elided_page_range,
+    }
+    return render(request, 'a_psat/snippets/page_filter.html', context)
 
 
 def index_view(request, tag=None):
-    problems = psat_models.Problem.objects.prefetch_related(
-        'like_users', 'rate_users', 'solve_users')
+    filterset = utils.get_filterset(request)
+    paginator = Paginator(filterset.qs, per_page=10)
 
-    if tag:
-        problems = problems.problemtag_set()
-        tag = get_object_or_404(psat_models.ProblemTag, tags=tag)
-    else:
-        problems = problems.all()
-
-    paginator = Paginator(problems, per_page=10)
     page = int(request.GET.get('page', 1))
+    elided_page_range = utils.get_elided_page_range(request, filterset, page)
+    next_path = utils.get_page_added_path(request, page)['next_path']
+
     try:
         problems = paginator.page(page)
     except EmptyPage:
@@ -27,7 +33,10 @@ def index_view(request, tag=None):
     context = {
         'problems': problems,
         'tag': tag,
+        'form': filterset.form,
+        'next_path': next_path,
         'page': page,
+        'elided_page_range': elided_page_range,
     }
     if request.htmx:
         return render(request, 'a_psat/snippets/loop_home_problems.html', context)

@@ -1,0 +1,67 @@
+{% load static %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_field %}
+
+<aside class="float md:!block col-span-full md:col-span-1 lg:mr-[20%] order-1 md:order-2"
+       x-show="mobileSidebarOpen" x-cloak
+       x-transition:enter="duration-300 ease-out"
+       x-transition:enter-start="opacity-0 -mt-96"
+       x-transition:enter-end="opacity-100 mt-0">
+    <section class="!sticky top-28 card p-4">
+        <h2>문제 필터</h2>
+        <form class="row row-cols-auto g-2 align-items-center justify-content-center"
+              hx-trigger="change" hx-target="#main" hx-push-url="false"
+              hx-get="{{ base_url }}">
+            <a type="button" class="btn btn-success m-1 fw-bold" hx-boost="true"
+               href="{{ base_url }}">
+                <i class="fa-solid fa-fw fa-layer-group"></i>
+                전체 문제
+            </a>
+            {% for field in form %}
+                <div class="my-1">
+                    {% if field.errors %}
+                        {% crispy_field field 'class' 'form-select is-invalid' %}
+                    {% else %}
+                        {% if field.value == None or field.value == '' %}
+                            {% crispy_field field 'class' 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500' %}
+                        {% else %}
+                            {% crispy_field field 'class' 'bg-gray-50 border border-blue-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-blue-500 dark:ring-blue-500 dark:placeholder-gray-400 dark:text-white ' %}
+                        {% endif %}
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <input id="id_data" type="hidden" name="keyword"
+                   value="{{ keyword }}" placeholder="{% trans 'Enter search keyword' %}">
+            <a type="button" class="btn btn-secondary m-1 fw-bold" hx-boost="true"
+               href="{{ base_url }}?keyword={{ keyword }}">
+                <i class="fa-solid fa-fw fa-filter-circle-xmark"></i>
+                필터 제거
+            </a>
+            <div id="filterPage" class="my-1">
+                {% include 'a_psat/snippets/page_filter.html' %}
+            </div>
+        </form>
+    </section>
+</aside>
+
+<aside x-show="mobileSidebarOpen" x-cloak class="md:!block col-span-full md:col-span-1 lg:mr-[20%] order-1 md:order-2"
+       x-transition:enter="duration-300 ease-out"
+       x-transition:enter-start="opacity-0 -mt-96"
+       x-transition:enter-end="opacity-100 mt-0">
+{#    <div class="accordion-item">#}
+{#        <h2 class="accordion-header">#}
+{#            <button class="accordion-button fw-bold" type="button"#}
+{#                    data-bs-toggle="collapse" data-bs-target="#collapseOne"#}
+{#                    aria-expanded="true" aria-controls="collapseOne">#}
+{#                <i class="fa-solid fa-fw fa-filter me-1"></i>#}
+{#                문제 필터#}
+{#            </button>#}
+{#        </h2>#}
+{#        <div id="collapseOne" class="accordion-collapse collapse show"#}
+{#             data-bs-parent="#problemFilter">#}
+{#            <div class="accordion-body pb-2">#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+</aside>

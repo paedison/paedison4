@@ -1,9 +1,8 @@
-{% extends '_layouts/_a.html' %}
+{% extends 'a_psat/_layouts/_a.html' %}
 
 {% block content %}
     {% for problem in problems %}{% include 'a_psat/problem.html' %}{% endfor %}
 
     <div hx-trigger="revealed" hx-target="this" hx-swap="outerHTML"
-     hx-get="{% if tag %}{% url 'category' tag.slug %}{% else %}
-            {% url 'psat:index' %}{% endif %}?page={{ page|add:1 }}"></div>
+         hx-get="{{ next_path }}"></div>
 {% endblock content %}

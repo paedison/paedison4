@@ -7,7 +7,6 @@ from django.templatetags.static import static
 from taggit.managers import TaggableManager
 
 from _config.settings import BASE_DIR
-from a_common.constants import icon_set
 
 
 class Problem(models.Model):

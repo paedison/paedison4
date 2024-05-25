@@ -3,7 +3,14 @@
 
 <rateproblem x-data="{ modalOpen: false }">
     {% if user.is_authenticated %}
-        <button id="problemRate{{ problem.id }}" @click="modalOpen = true">{{ icon_rate|safe }}</button>
+        <button id="problemRate{{ problem.id }}" @click="modalOpen = true"
+                x-transition:enter="transition ease-out duration-300"
+                x-transition:enter-start="opacity-0 scale-90"
+                x-transition:enter-end="opacity-100 scale-100"
+                x-transition:leave="transition ease-in duration-300"
+                x-transition:leave-start="opacity-100 scale-100"
+                x-transition:leave-end="opacity-0 scale-90"
+        >{{ icon_rate|safe }}</button>
         <modal class="fixed inset-0 px-2 z-20 overflow-hidden flex items-center justify-center"
              x-show="modalOpen">
             <modaloverlayer class="absolute inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
@@ -24,21 +31,26 @@
                  x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
                  x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-                <modalheader class="flex items-center justify-center p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                    <h2 class="text-xl font-semibold m-0 text-gray-900 dark:text-white">
+                <modalheader class="flex flex-col items-center justify-center p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                    <h2 class="text-xl font-semibold m-0 text-blue-700 dark:text-white">
                         문제 난이도를 선택해주세요.
                     </h2>
+                    {% with p=problem %}
+                        <div>{{ p.year }}년 {{ p.exam }} {{ p.subject }} {{ p.number }}번</div>
+                    {% endwith %}
                 </modalheader>
                 <modalbody class="p-4 text-center text-base">
-                    <form class="rate_button"
-                          hx-target="#problemRate{{ problem.id }}" type="button">
+                    <form class="rate_button" type="button"
+                          hx-target="#problemRate{{ problem.id }}">
                         <fieldset>
                             {% for i in '12345' %}
                                 <input id="rating{{ problem.id }}-{{ i }}"
                                        type="radio" name="rating" value="{{ i|subtract:6 }}"
                                        @click="modalOpen = false"
                                        hx-post="{% url 'psat:rate-problem' problem.id %}">
-                                <label for="rating{{ problem.id }}-{{ i }}"><i class="fa fa-star cursor-pointer"></i></label>
+                                <label for="rating{{ problem.id }}-{{ i }}">
+                                    <i class="fa fa-star cursor-pointer"></i>
+                                </label>
                             {% endfor %}
                         </fieldset>
                     </form>
