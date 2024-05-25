@@ -1,34 +1,80 @@
-{% extends '_layouts/_a.html' %}
+{% extends 'a_psat/_layouts/_b.html' %}
+{% load static %}
+{% load psat_icon %}
 
 {% block content %}
-    {% include 'a_posts/post.html' %}
+    {% partialdef problem_card inline=True %}
+    <article class="card">
+        {% with p=problem %}
+            <div class="grid bg-gray-700 text-white bg-cover z-10 relative">
+                <div class="col-start-1 row-start-1 bg-opacity-40 w-full h-full
+                    {% if p.sub == '언어' %}bg-blue-600
+                    {% elif p.sub == '자료' %}bg-emerald-600
+                    {% elif p.sub == '상황' %}bg-amber-600{% endif %}">
+                </div>
+                <div class="col-start-1 row-start-1 p-4">
+                    <a class="flex items-center gap-1"
+                       href="{% url 'psat:problem' p.id %}">
+                        <span class="font-bold hover:underline">
+                            {{ p.year }}년 {{ p.exam }} {{ p.subject }} {{ p.number }}번
+                        </span>
+                    </a>
+                </div>
+            </div>
+            <figure class="lg:grid lg:grid-cols-2">
+                {% if p.images.tag1 == 'Preparing Image' %}
+                    <img class="max-w-[100%] mx-auto" alt="{{ p.images.tag1 }}"
+                         src="{{ p.images.name1 }}"/>
+                {% elif p.images.name2 %}
+                    <div class="lg:col-start-1">
+                        <img class="w-full"
+                             data-bs-toggle="modal" data-bs-target="#modalContainerPsat"
+                             alt="{{ p.images.tag1 }}" src="{{ p.images.name1 }}"/>
+                    </div>
+                    <div class="lg:col-start-2">
+                        <img class="w-full"
+                             data-bs-toggle="modal" data-bs-target="#modalContainerPsat"
+                             alt="{{ p.images.tag2 }}" src="{{ p.images.name2 }}"/>
+                    </div>
+                {% else %}
+                    <img class="max-w-[100%] mx-auto"
+                         data-bs-toggle="modal" data-bs-target="#modalContainerPsat"
+                         alt="{{ p.images.tag1 }}" src="{{ p.images.name1 }}"/>
+                {% endif %}
 
-    {% if user.is_authenticated %}
-        <div class="card !pb-0 -mt-3">
-            <form class="flex items-center p-4" autocomplete="off"
-                  _="on htmx:afterRequest reset() me"
-                  hx-target="#tab-contents" hx-swap="afterbegin"
-                  hx-post="{% url 'comment-sent' post.id %}">
-                {% csrf_token %}
-                {{ comment_form.body }}
-                <button @click="open = false" class="block ml-2" type="submit">Submit</button>
-            </form>
+                <a href="">
+                    <img class="w-full h-[200px] object-cover object-top"
+                         src="{{ p.images.name1 }}" alt="{{ p.images.tag1 }}">
+                </a>
+            </figure>
+            <div class="p-4 pb-2">
+    {#        <p class="text-5xl mb-10 px-4 font1">{{ problem.body }}</p>#}
+    {#        <div class="flex items-center gap-2 text-sm mb-5 flex-wrap">#}
+    {#            {% for tag in problem.tags.all %}#}
+    {#                <a href="{% url 'category' tag.slug %}"#}
+    {#                   class="bg-gray-200 rounded-full px-3 py-1 hover:bg-gray-800 hover:text-white">{{ tag }}</a>#}
+    {#            {% endfor %}#}
+    {#        </div>#}
+        {% endwith %}
+            <div class="flex items-center justify-between text-sm px-2">
+                <a class="font-bold hover:underline" href="">
+                    {% if problem.comments.count %}
+                        Comments
+                        <span id="commentsCount-{{ problem.id }}"
+                              class="font-light text-gray-500 ml-1">
+                            {{ problem.comments.count }}
+                        </span>
+                    {% else %}
+                        {% if user.is_authenticated %}Add comment{% endif %}
+                    {% endif %}
+                </a>
+                <div class="flex items-center gap-2 [&>a:hover]:underline">
+                    {% tag_icon_like user problem %}
+                    {% tag_icon_rate user problem %}
+                    {% tag_icon_solve user problem %}
+                </div>
+            </div>
         </div>
-    {% endif %}
-
-    <div class="mb-20">
-        <div id="tabs" class="ml-4 flex gap-1 mb-4{% if not post.comments.count %} hidden{% endif %}"
-             _="on htmx:afterOnLoad take .selected for event.target"
-             hx-target="#tab-contents" hx-swap="innerHTML">
-            <a class="tab selected" hx-get="{% url 'post' post.id %}">Newest First</a>
-            <a class="tab" hx-get="{% url 'post' post.id %}?top">Top Comments</a>
-        </div>
-
-        <div id="tab-contents">
-            {% for comment in post.comments.all %}
-                {% include 'a_posts/comment.html' %}
-            {% endfor %}
-        </div>
-    </div>
-
+    </article>
+    {% endpartialdef problem_card %}
 {% endblock content %}

@@ -1,0 +1,23 @@
+{% extends '_base.html' %}
+
+{% block layout %}
+    {% include '_includes/_hero.html' %}
+
+    <content id="content" class="htmx-fade-in htmx-fade-out">
+        <div class="max-w-7xl mx-auto my-6 px-6"
+             x-data="{ mobileSidebarOpen: false }">
+            <main id="main" class="col-span-full md:col-span-2 md:mr-[5%] lg:mx-[10%] order-2 md:order-1">
+                {% block content %}{% endblock %}
+            </main>
+        </div>
+    </content>
+{% endblock layout %}
+
+{% partialdef htmx_page %}
+    <div class="max-w-7xl mx-auto my-6 px-6"
+         x-data="{ mobileSidebarOpen: false }">
+        <main id="main" class="col-span-full md:col-span-2 md:mr-[5%] lg:mx-[10%] order-2 md:order-1">
+            {% include 'a_psat/problem_page.html#problem_card' %}
+        </main>
+    </div>
+{% endpartialdef htmx_page %}

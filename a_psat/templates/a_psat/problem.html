@@ -4,21 +4,27 @@
 <article class="card">
     {% with p=problem %}
         <div class="grid bg-gray-700 text-white bg-cover z-10 relative">
-            <div class="col-start-1 row-start-1 bg-opacity-40 w-full h-full text-right text-4xl pe-4
+            <div class="col-start-1 row-start-1 bg-opacity-40 w-full h-full
                 {% if p.sub == '언어' %}bg-blue-600
                 {% elif p.sub == '자료' %}bg-emerald-600
                 {% elif p.sub == '상황' %}bg-amber-600{% endif %}">
-            PSAT
             </div>
             <div class="col-start-1 row-start-1 p-4">
-                <a class="flex items-center gap-1" href="">
-                    <span class="font-bold hover:underline">{{ p.year }}년 {{ p.exam }} {{ p.subject }} {{ p.number }}번</span>
+                <a class="flex items-center gap-1 cursor-pointer"
+                   hx-target="#content" hx-push-url="true" hx-swap="swap:0.25s"
+                   hx-get="{% url 'psat:problem' p.id %}">
+                    <span class="font-bold hover:underline">
+                        {{ p.year }}년 {{ p.exam }} {{ p.subject }} {{ p.number }}번
+                    </span>
                 </a>
             </div>
         </div>
         <figure>
-            <a href="">
-                <img class="w-full h-[200px] object-cover object-top" src="{{ p.images.name1 }}" alt="{{ p.images.tag1 }}">
+            <a class="cursor-pointer"
+               hx-target="#content" hx-push-url="true" hx-swap="swap:0.25s"
+               hx-get="{% url 'psat:problem' p.id %}">
+                <img class="w-full h-[200px] object-cover object-top"
+                     src="{{ p.images.name1 }}" alt="{{ p.images.tag1 }}">
             </a>
         </figure>
         <div class="p-4 pb-2">
@@ -35,7 +41,9 @@
                 {% if problem.comments.count %}
                     Comments
                     <span id="commentsCount-{{ problem.id }}"
-                          class="font-light text-gray-500 ml-1">{{ problem.comments.count }}</span>
+                          class="font-light text-gray-500 ml-1">
+                        {{ problem.comments.count }}
+                    </span>
                 {% else %}
                     {% if user.is_authenticated %}Add comment{% endif %}
                 {% endif %}
@@ -43,8 +51,7 @@
             <div class="flex items-center gap-2 [&>a:hover]:underline">
                 {% tag_icon_like user problem %}
                 {% tag_icon_rate user problem %}
-{#                {% include 'a_psat/snippets/rates.html' %}#}
-{#                {% include 'a_psat/snippets/solves.html' %}#}
+                {% tag_icon_solve user problem %}
             </div>
         </div>
     </div>

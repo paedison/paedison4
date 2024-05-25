@@ -273,3 +273,16 @@ form[action="/accounts/signup/"] ul.errorlist {
 .rate_button input[type=radio]:checked ~ label{
     text-shadow: 0 0 0 #fde047; /* 마우스 클릭 체크 */
 }
+
+
+.htmx-fade-in.htmx-added {
+  opacity: 0;
+}
+.htmx-fade-in {
+  opacity: 1;
+  transition: opacity 0.25s ease-out;
+}
+.htmx-fade-out.htmx-swapping {
+  opacity: 0;
+  transition: opacity 0.25s ease-out;
+}

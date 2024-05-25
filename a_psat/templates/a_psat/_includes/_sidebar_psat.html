@@ -3,11 +3,7 @@
 {% load crispy_forms_tags %}
 {% load crispy_forms_field %}
 
-<aside class="float md:!block col-span-full md:col-span-1 lg:mr-[20%] order-1 md:order-2"
-       x-show="mobileSidebarOpen" x-cloak
-       x-transition:enter="duration-300 ease-out"
-       x-transition:enter-start="opacity-0 -mt-96"
-       x-transition:enter-end="opacity-100 mt-0">
+<div>
     <section class="!sticky top-28 card p-4">
         <h2>문제 필터</h2>
         <form class="row row-cols-auto g-2 align-items-center justify-content-center"
@@ -19,14 +15,15 @@
                 전체 문제
             </a>
             {% for field in form %}
-                <div class="my-1">
+                <div class="my-1"
+                     _="on change from #{{ field.auto_id }} set #id_page.value to '1'">
                     {% if field.errors %}
                         {% crispy_field field 'class' 'form-select is-invalid' %}
                     {% else %}
                         {% if field.value == None or field.value == '' %}
                             {% crispy_field field 'class' 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500' %}
                         {% else %}
-                            {% crispy_field field 'class' 'bg-gray-50 border border-blue-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-blue-500 dark:ring-blue-500 dark:placeholder-gray-400 dark:text-white ' %}
+                            {% crispy_field field 'class' 'bg-gray-50 border-2 border-blue-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500' %}
                         {% endif %}
                     {% endif %}
                 </div>
@@ -39,13 +36,26 @@
                 필터 제거
             </a>
             <div id="filterPage" class="my-1">
-                {% include 'a_psat/snippets/page_filter.html' %}
+                <select id="id_page" name="page"
+                        class="select bg-gray-50 border-2 border-blue-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        hx-target="#aside" hx-swap="innerHTML swap:0.25s"
+                        hx-get="{% url 'psat:page-filter' %}">
+                    {% for p in elided_page_range %}
+                        {% if p == '…' %}
+                            <option value="{{ p }}" disabled>{{ p }}</option>
+                        {% elif p == page %}
+                            <option value="{{ p }}" selected>{{ p }}페이지</option>
+                        {% else %}
+                            <option value="{{ p }}">{{ p }}페이지</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
             </div>
         </form>
     </section>
-</aside>
+</div>
 
-<aside x-show="mobileSidebarOpen" x-cloak class="md:!block col-span-full md:col-span-1 lg:mr-[20%] order-1 md:order-2"
+<div x-show="mobileSidebarOpen" x-cloak class="md:!block col-span-full md:col-span-1 lg:mr-[20%] order-1 md:order-2"
        x-transition:enter="duration-300 ease-out"
        x-transition:enter-start="opacity-0 -mt-96"
        x-transition:enter-end="opacity-100 mt-0">
@@ -64,4 +74,4 @@
 {#            </div>#}
 {#        </div>#}
 {#    </div>#}
-</aside>
+</div>

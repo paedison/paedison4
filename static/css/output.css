@@ -1091,21 +1091,16 @@ input:checked + .toggle-bg {
   position: relative;
 }
 
-.sticky {
-  position: sticky;
-}
-
 .\!sticky {
   position: sticky !important;
 }
 
-.inset-0 {
-  inset: 0px;
+.sticky {
+  position: sticky;
 }
 
-.inset-y-0 {
-  top: 0px;
-  bottom: 0px;
+.inset-0 {
+  inset: 0px;
 }
 
 .bottom-0 {
@@ -1144,36 +1139,12 @@ input:checked + .toggle-bg {
   top: 0.5rem;
 }
 
-.top-3 {
-  top: 0.75rem;
-}
-
-.top-40 {
-  top: 10rem;
-}
-
-.top-\[400px\] {
-  top: 400px;
-}
-
-.top-\[400\] {
-  top: 400;
-}
-
-.top-20 {
-  top: 5rem;
-}
-
-.top-44 {
-  top: 11rem;
-}
-
-.top-24 {
-  top: 6rem;
-}
-
 .top-28 {
   top: 7rem;
+}
+
+.top-3 {
+  top: 0.75rem;
 }
 
 .z-10 {
@@ -1226,10 +1197,6 @@ input:checked + .toggle-bg {
 
 .row-start-1 {
   grid-row-start: 1;
-}
-
-.float-end {
-  float: inline-end;
 }
 
 .m-0 {
@@ -1630,6 +1597,10 @@ input:checked + .toggle-bg {
 
 .max-w-7xl {
   max-width: 80rem;
+}
+
+.max-w-\[100\%\] {
+  max-width: 100%;
 }
 
 .max-w-\[1170px\] {
@@ -2278,10 +2249,6 @@ input:checked + .toggle-bg {
   padding-bottom: 1rem;
 }
 
-.pe-4 {
-  padding-inline-end: 1rem;
-}
-
 .pl-8 {
   padding-left: 2rem;
 }
@@ -2320,10 +2287,6 @@ input:checked + .toggle-bg {
 
 .text-center {
   text-align: center;
-}
-
-.text-right {
-  text-align: right;
 }
 
 .text-start {
@@ -2490,6 +2453,11 @@ input:checked + .toggle-bg {
 
 .outline {
   outline-style: solid;
+}
+
+.ring-blue-500 {
+  --tw-ring-opacity: 1;
+  --tw-ring-color: rgb(63 131 248 / var(--tw-ring-opacity));
 }
 
 .blur {
@@ -2981,6 +2949,20 @@ form[action="/accounts/signup/"] ul.errorlist {
   /* 마우스 클릭 체크 */
 }
 
+.htmx-fade-in.htmx-added {
+  opacity: 0;
+}
+
+.htmx-fade-in {
+  opacity: 1;
+  transition: opacity 0.25s ease-out;
+}
+
+.htmx-fade-out.htmx-swapping {
+  opacity: 0;
+  transition: opacity 0.25s ease-out;
+}
+
 .hover\:scale-95:hover {
   --tw-scale-x: .95;
   --tw-scale-y: .95;
@@ -3439,6 +3421,14 @@ form[action="/accounts/signup/"] ul.errorlist {
 }
 
 @media (min-width: 1024px) {
+  .lg\:col-start-1 {
+    grid-column-start: 1;
+  }
+
+  .lg\:col-start-2 {
+    grid-column-start: 2;
+  }
+
   .lg\:m-0 {
     margin: 0px;
   }
@@ -3459,6 +3449,10 @@ form[action="/accounts/signup/"] ul.errorlist {
 
   .lg\:block {
     display: block;
+  }
+
+  .lg\:grid {
+    display: grid;
   }
 
   .lg\:h-10 {

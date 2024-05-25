@@ -3,7 +3,8 @@ from a_psat import filters
 
 
 def get_filterset(request: HtmxHttpRequest):
-    psat_filter = filters.PsatFilter if request.user.is_authenticated else filters.AnonymousPsatFilter
+    logged_in = request.user.is_authenticated
+    psat_filter = filters.PsatFilter if logged_in else filters.AnonymousPsatFilter
     return psat_filter(data=request.GET, request=request)
 
 
@@ -18,15 +19,17 @@ def get_page_added_path(request: HtmxHttpRequest, page: int):
     }
 
 
-def get_elided_page_range(request, filterset=None, number=None, *, on_each_side=5, on_ends=1):
+def get_elided_page_range(
+        request, filterset=None, number=None, num_pages=None,
+        *, on_each_side=5, on_ends=1
+):
     if filterset is None:
         filterset = get_filterset(request)
     if number is None:
         number = int(request.GET.get('page', 1))
-    num_pages = filterset.qs.count() // 10 + 1
+    if num_pages is None:
+        num_pages = filterset.qs.count() // 10 + 1
     page_range = range(1, num_pages + 1)
-    print(number, num_pages)
-    print(filterset.qs.count())
 
     _ellipsis = "…"
     if num_pages <= (on_each_side + on_ends) * 2:
