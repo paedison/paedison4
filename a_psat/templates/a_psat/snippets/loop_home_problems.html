@@ -1,12 +1,7 @@
 <fade-in class="opacity-0" _="on load transition my opacity to 1 over 0.2 seconds">
     {% for problem in problems %}{% include 'a_psat/problem.html' %}{% endfor %}
 
-    <aside id="aside" hx-swap-oob="true"
-           class="float md:!block col-span-full md:col-span-1 lg:mr-[20%] order-1 md:order-2 htmx-fade-in htmx-fade-out"
-           x-show="mobileSidebarOpen" x-cloak
-           x-transition:enter="duration-300 ease-out"
-           x-transition:enter-start="opacity-0 -mt-96"
-           x-transition:enter-end="opacity-100 mt-0">
+    <aside id="aside" hx-swap-oob="innerHTML">
         {% include 'a_psat/_includes/_sidebar_psat.html' %}
     </aside>
 

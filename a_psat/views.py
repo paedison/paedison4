@@ -76,7 +76,7 @@ def like_problem(request, pk):
         'problem': problem,
         'icon_like': icon_like,
     }
-    return render(request, 'a_psat/snippets/likes.html', context)
+    return render(request, 'a_psat/snippets/like_result.html', context)
 
 
 @login_required
@@ -85,16 +85,14 @@ def rate_problem(request, pk):
         rating = request.POST.get('rating')
         problem = get_object_or_404(psat_models.Problem, pk=pk)
         user_exists = problem.problemrate_set.filter(user=request.user).exists()
-        print(user_exists)
         if user_exists:
             problem_rate = psat_models.ProblemRate.objects.get(
                 user=request.user, problem=problem)
             problem_rate.rating = rating
             problem_rate.save()
         else:
-            test = problem.rate_users.add(
+            problem.rate_users.add(
                 request.user, through_defaults={'rating': rating})
-            print(test)
         icon_rate = icon_set.ICON_RATE[f'star{rating}']
         return HttpResponse(icon_rate)
 
@@ -102,18 +100,30 @@ def rate_problem(request, pk):
 @login_required
 def solve_problem(request, pk):
     if request.method == 'POST':
-        rating = request.POST.get('rating')
+        answer = int(request.POST.get('answer'))
         problem = get_object_or_404(psat_models.Problem, pk=pk)
-        user_exists = problem.problemrate_set.filter(user=request.user).exists()
-        print(user_exists)
+        is_correct = answer == problem.answer
+
+        user_exists = problem.problemsolve_set.filter(user=request.user).exists()
         if user_exists:
-            problem_rate = psat_models.ProblemRate.objects.get(
+            problem_solve = psat_models.ProblemSolve.objects.get(
                 user=request.user, problem=problem)
-            problem_rate.rating = rating
-            problem_rate.save()
+            problem_solve.answer = answer
+            problem_solve.is_correct = is_correct
+            problem_solve.save()
         else:
-            test = problem.rate_users.add(
-                request.user, through_defaults={'rating': rating})
-            print(test)
-        icon_rate = icon_set.ICON_RATE[f'star{rating}']
-        return HttpResponse(icon_rate)
+            problem.solve_users.add(
+                request.user,
+                through_defaults={'answer': answer, 'is_correct': is_correct}
+            )
+
+        icon_solve = icon_set.ICON_SOLVE[f'{is_correct}']
+        message = '정답입니다.' if is_correct else '오답입니다. 다시 풀어보세요.'
+
+        context = {
+            'problem': problem,
+            'icon_solve': icon_solve,
+            'is_correct': is_correct,
+            'message': message,
+        }
+        return render(request, 'a_psat/snippets/solve_result.html', context)

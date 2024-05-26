@@ -21,6 +21,11 @@
                     </a>
                 </div>
             </div>
+            <div class="flex items-center justify-end gap-2 p-4">
+                {% tag_icon_like user problem %}
+                {% tag_icon_rate user problem %}
+                {% tag_icon_solve user problem %}
+            </div>
             <figure class="lg:grid lg:grid-cols-2">
                 {% if p.images.tag1 == 'Preparing Image' %}
                     <img class="max-w-[100%] mx-auto" alt="{{ p.images.tag1 }}"
@@ -41,20 +46,8 @@
                          data-bs-toggle="modal" data-bs-target="#modalContainerPsat"
                          alt="{{ p.images.tag1 }}" src="{{ p.images.name1 }}"/>
                 {% endif %}
-
-                <a href="">
-                    <img class="w-full h-[200px] object-cover object-top"
-                         src="{{ p.images.name1 }}" alt="{{ p.images.tag1 }}">
-                </a>
             </figure>
             <div class="p-4 pb-2">
-    {#        <p class="text-5xl mb-10 px-4 font1">{{ problem.body }}</p>#}
-    {#        <div class="flex items-center gap-2 text-sm mb-5 flex-wrap">#}
-    {#            {% for tag in problem.tags.all %}#}
-    {#                <a href="{% url 'category' tag.slug %}"#}
-    {#                   class="bg-gray-200 rounded-full px-3 py-1 hover:bg-gray-800 hover:text-white">{{ tag }}</a>#}
-    {#            {% endfor %}#}
-    {#        </div>#}
         {% endwith %}
             <div class="flex items-center justify-between text-sm px-2">
                 <a class="font-bold hover:underline" href="">
@@ -68,11 +61,6 @@
                         {% if user.is_authenticated %}Add comment{% endif %}
                     {% endif %}
                 </a>
-                <div class="flex items-center gap-2 [&>a:hover]:underline">
-                    {% tag_icon_like user problem %}
-                    {% tag_icon_rate user problem %}
-                    {% tag_icon_solve user problem %}
-                </div>
             </div>
         </div>
     </article>

@@ -1,0 +1,9 @@
+{% if is_correct %}
+    <span class="text-green-400">{{ message }}</span>
+{% else %}
+    <span class="text-red-700">{{ message }}</span>
+{% endif %}
+
+<button id="problemSolve{{ problem.id }}" hx-swap-oob="innerHTML">
+    {{ icon_solve|safe }}
+</button>

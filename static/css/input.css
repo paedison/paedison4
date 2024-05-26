@@ -275,6 +275,14 @@ form[action="/accounts/signup/"] ul.errorlist {
 }
 
 
+/* solve button */
+.solve_button{
+    @apply bg-green-400 text-white font-bold rounded-full w-10 h-10 cursor-pointer flex items-center justify-center
+    hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-700 focus:ring-opacity-50
+    has-[:checked]:bg-green-700;
+}
+
+
 .htmx-fade-in.htmx-added {
   opacity: 0;
 }
