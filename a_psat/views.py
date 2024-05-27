@@ -31,7 +31,7 @@ def index_view(request, tag=None):
     }
     if request.htmx:
         return render(
-            request, 'a_psat/snippets/loop_home_problems.html', context)
+            request, 'a_psat/problem.html#htmx_request', context)
     return render(request, 'a_psat/index.html', context)
 
 
@@ -71,13 +71,11 @@ def like_problem(request, pk):
     if user_exists:
         problem.like_users.remove(request.user)
     else:
-        problem.like_users.add(request.user)
+        problem.like_users.add(
+            request.user, through_defaults={'is_liked': True})
     icon_like = icon_set.ICON_LIKE[f'{not user_exists}']
-    context = {
-        'problem': problem,
-        'icon_like': icon_like,
-    }
-    return render(request, 'a_psat/snippets/like_result.html', context)
+    like_users = problem.like_users.count()
+    return HttpResponse(f'{icon_like} {like_users}')
 
 
 @login_required
@@ -127,7 +125,7 @@ def solve_problem(request, pk):
             'is_correct': is_correct,
             'message': message,
         }
-        return render(request, 'a_psat/snippets/solve_result.html', context)
+        return render(request, 'a_psat/snippets/solves.html#result', context)
 
 
 @login_required

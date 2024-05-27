@@ -1,5 +1,5 @@
 {% load static %}
-{% load psat_icon %}
+{% load psat_templatetags %}
 
 <rate-problem x-data="{ modalOpen: false }">
     {% if user.is_authenticated %}
@@ -38,12 +38,10 @@
                     <h2 class="text-xl font-semibold m-0 text-blue-700 dark:text-white">
                         문제 난이도를 선택해주세요.
                     </h2>
-                    {% with p=problem %}
-                        <a class="font-bold text-gray-500 hover:underline"
-                           href="{% url 'psat:problem' p.id %}">
-                            {{ p.year }}년 {{ p.exam }} {{ p.subject }} {{ p.number }}번
-                        </a>
-                    {% endwith %}
+                    <a class="font-bold text-gray-500 hover:underline"
+                       href="{{ problem.get_absolute_url }}">
+                        {{ problem.full_reference }}
+                    </a>
                 </modal-header>
                 <modal-body class="p-4 text-center text-base">
                     <form class="rate_button" type="button"

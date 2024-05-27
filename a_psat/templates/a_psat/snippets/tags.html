@@ -1,0 +1,13 @@
+<problem-tag class="flex items-center gap-2 text-sm mb-5 flex-wrap">
+    {% for tag in tags %}
+        <a href=""
+           class="bg-gray-200 rounded-full px-3 py-1 hover:bg-gray-800 hover:text-white">
+            {{ tag }}
+        </a>
+    {% endfor %}
+    <a class="bg-gray-500 rounded-full px-3 py-1 hover:bg-gray-800 text-white"
+       href="{% if user.is_authenticated %}{% url 'psat:add-problem-tag' problem.id %}
+             {% else %}{% url 'account_login' %}{% endif %}">
+        <i class="fa-solid fa-plus"></i> 태그 추가
+    </a>
+</problem-tag>

@@ -4,6 +4,7 @@ from ckeditor.fields import RichTextField
 from django.contrib.auth.models import User
 from django.db import models
 from django.templatetags.static import static
+from django.urls import reverse
 from taggit.managers import TaggableManager
 
 from _config.settings import BASE_DIR
@@ -39,31 +40,35 @@ class Problem(models.Model):
     def __str__(self):
         return f'{self.year_ex_sub}({self.id})'
 
+    def get_absolute_url(self):
+        return reverse('psat:problem', args=[self.id])
+
     @property
     def year_ex_sub(self):
         return f'{self.year}{self.ex}{self.sub}'
 
     @property
+    def full_reference(self):
+        return f'{self.year}년 {self.exam} {self.subject} {self.number}번'
+
+    @property
     def images(self) -> dict:
-        static_path = BASE_DIR / 'static'
+        def get_image_path_and_name(number):
+            filename = f'PSAT{self.year_ex_sub}{self.number:02}-{number}.png'
+            image_exists = os.path.exists(
+                os.path.join(BASE_DIR, 'static', 'image', 'PSAT', str(self.year), filename))
+            path = name = ''
+            if number == 1:
+                path = static('image/preparing.png')
+                name = 'Preparing Image'
+            if image_exists:
+                path = static(f'image/PSAT/{self.year}/{filename}')
+                name = f'Problem Image {number}'
+            return path, name
 
-        preparing_image = static('image/preparing.png')
-        file1 = f'PSAT{self.year_ex_sub}{self.number:02}-1.png'
-        file2 = f'PSAT{self.year_ex_sub}{self.number:02}-2.png'
-        problem_image1 = static(f'image/PSAT/{self.year}/{file1}')
-        problem_image2 = static(f'image/PSAT/{self.year}/{file2}')
-
-        image1_os_path = os.path.join(static_path, 'image', 'PSAT', str(self.year), file1)
-        image1_exists = os.path.exists(image1_os_path)
-        image2_os_path = os.path.join(static_path, 'image', 'PSAT', str(self.year), file2)
-        image2_exists = os.path.exists(image2_os_path)
-
-        return {
-            'name1': problem_image1 if image1_exists else preparing_image,
-            'tag1': 'Problem Image 1' if image1_exists else 'Preparing Image',
-            'name2': problem_image2 if image2_exists else '',
-            'tag2': 'Problem Image 2' if image2_exists else '',
-        }
+        path1, name1 = get_image_path_and_name(1)
+        path2, name2 = get_image_path_and_name(2)
+        return {'path1': path1, 'path2': path2, 'name1': name1, 'name2': name2}
 
 
 class ProblemOpen(models.Model):

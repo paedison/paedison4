@@ -25,10 +25,8 @@ CHOICES_SUBJECT = (
     ('상황', '상황판단'),
 )
 CHOICES_LIKE = (
-    ('all', '즐겨찾기 지정'),
     ('true', '즐겨찾기 추가'),
-    ('false', '즐겨찾기 제외'),
-    ('none', '즐겨찾기 미지정'),
+    ('none', '즐겨찾기 미추가'),
 )
 CHOICES_RATE = (
     ('all', '난이도 지정'),
@@ -143,9 +141,7 @@ class PsatFilter(AnonymousPsatFilter):
 
     def filter_likes(self, queryset, name, value):
         filter_dict = {
-            'all': queryset.filter(problemlike__isnull=False, like_users=self.request.user),
-            'true': queryset.filter(problemlike__is_liked=True, like_users=self.request.user),
-            'false': queryset.filter(problemlike__is_liked=False, like_users=self.request.user),
+            'true': queryset.filter(like_users=self.request.user),
             'none': queryset.exclude(like_users=self.request.user),
         }
         return filter_dict[value]

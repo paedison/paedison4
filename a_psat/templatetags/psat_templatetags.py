@@ -8,7 +8,7 @@ register = Library()
 
 
 @register.inclusion_tag('a_psat/snippets/likes.html')
-def tag_icon_like(user, problem: psat_models.Problem):
+def container_icon_like(user, problem: psat_models.Problem):
     user_exists = user in problem.like_users.all()
     icon_like = icon_set.ICON_LIKE[f'{user_exists}']
     return {
@@ -19,7 +19,7 @@ def tag_icon_like(user, problem: psat_models.Problem):
 
 
 @register.inclusion_tag('a_psat/snippets/rates.html')
-def tag_icon_rate(user: User, problem: psat_models.Problem):
+def container_icon_rate(user: User, problem: psat_models.Problem):
     rating = 0
     if user in problem.rate_users.all():
         rating = problem.problemrate_set.filter(user=user).first().rating
@@ -32,7 +32,7 @@ def tag_icon_rate(user: User, problem: psat_models.Problem):
 
 
 @register.inclusion_tag('a_psat/snippets/solves.html')
-def tag_icon_solve(user: User, problem: psat_models.Problem):
+def container_icon_solve(user: User, problem: psat_models.Problem):
     is_correct = None
     if user in problem.solve_users.all():
         is_correct = problem.problemsolve_set.filter(user=user).first().is_correct
@@ -41,6 +41,18 @@ def tag_icon_solve(user: User, problem: psat_models.Problem):
         'user': user,
         'problem': problem,
         'icon_solve': icon_solve,
+    }
+
+
+@register.inclusion_tag('a_psat/snippets/tags.html')
+def container_problem_tag(user: User, problem: psat_models.Problem):
+    tags = []
+    if user in problem.tag_users.all():
+        tags = problem.problemtag_set.get(user=user).tags.names
+    return {
+        'user': user,
+        'problem': problem,
+        'tags': tags,
     }
 
 

@@ -1,68 +1,70 @@
-{% load static %}
-{% load psat_icon %}
+{% load psat_templatetags %}
 
-{% with p=problem %}
+{% partialdef problem_card inline=True %}
     <article class="card">
-        <div class="grid bg-gray-700 text-white bg-cover z-10 relative">
-            <div class="col-start-1 row-start-1 bg-opacity-40 w-full h-full
-                {% if p.sub == '언어' %}bg-blue-600
-                {% elif p.sub == '자료' %}bg-emerald-600
-                {% elif p.sub == '상황' %}bg-amber-600{% endif %}">
-            </div>
-            <div class="col-start-1 row-start-1 p-4">
-                <a class="flex items-center gap-1 cursor-pointer"
-                   hx-target="#content" hx-push-url="true" hx-swap="swap:0.25s"
-                   hx-get="{% url 'psat:problem' p.id %}">
-                    <span class="font-bold hover:underline">
-                        {{ p.year }}년 {{ p.exam }} {{ p.subject }} {{ p.number }}번
-                    </span>
-                </a>
-            </div>
-        </div>
+        {% partialdef card_header inline=True %}
+            <card-header class="grid bg-gray-700 text-white bg-cover z-10 relative">
+                <div class="col-start-1 row-start-1 bg-opacity-40 w-full h-full
+                    {% if problem.sub == '언어' %}bg-blue-600
+                    {% elif problem.sub == '자료' %}bg-emerald-600
+                    {% elif problem.sub == '상황' %}bg-amber-600{% endif %}">
+                </div>
+                <div class="col-start-1 row-start-1 p-4">
+                    <a class="flex items-center gap-1 cursor-pointer"
+                       hx-target="#content" hx-push-url="true" hx-swap="swap:0.25s"
+                       hx-get="{{ problem.get_absolute_url }}">
+                        <span class="font-bold hover:underline">
+                            {{ problem.full_reference }}
+                        </span>
+                    </a>
+                </div>
+            </card-header>
+        {% endpartialdef card_header %}
+
         <figure>
             <a class="cursor-pointer"
                hx-target="#content" hx-push-url="true" hx-swap="swap:0.25s"
-               hx-get="{% url 'psat:problem' p.id %}">
+               hx-get="{{ problem.get_absolute_url }}">
                 <img class="w-full h-[200px] object-cover object-top"
-                     src="{{ p.images.name1 }}" alt="{{ p.images.tag1 }}">
+                     alt="{{ problem.images.name1 }}"
+                     src="{{ problem.images.path1 }}"/>
             </a>
         </figure>
+
         <div class="p-4 pb-2">
-            <div class="flex items-center gap-2 text-sm mb-5 flex-wrap">
-                {% for problemtag in p.problemtag_set.all %}
-                    {% if problemtag.user == user %}
-                        {% for tag in problemtag.tags.names %}
-                            <a href=""
-                               class="bg-gray-200 rounded-full px-3 py-1 hover:bg-gray-800 hover:text-white">
-                                {{ tag }}
-                            </a>
-                        {% endfor %}
-                    {% endif %}
-                {% endfor %}
-                <a class="bg-gray-500 rounded-full px-3 py-1 hover:bg-gray-800 text-white"
-                   href="{% if user.is_authenticated %}{% url 'psat:add-problem-tag' p.id %}
-                         {% else %}{% url 'account_login' %}{% endif %}">
-                    <i class="fa-solid fa-plus"></i> 태그 추가
-                </a>
-            </div>
+            {% container_problem_tag user problem %}
+
             <div class="flex items-center justify-between text-sm px-2">
-                <a class="font-bold hover:underline" href="{% url 'psat:problem' p.id %}">
-                    {% if p.comment_users.count %}
+                <a class="font-bold hover:underline" href="{% url 'psat:problem' problem.id %}">
+                    {% if problem.comment_users.count %}
                         Comments
-                        <span id="commentsCount-{{ p.id }}"
+                        <span id="commentsCount-{{ problem.id }}"
                               class="font-light text-gray-500 ml-1">
-                        {{ p.comment_users.count }}
+                        {{ problem.comment_users.count }}
                     </span>
                     {% else %}
                         {% if user.is_authenticated %}Add comment{% endif %}
                     {% endif %}
                 </a>
                 <div class="flex items-center gap-2 [&>a:hover]:underline">
-                    {% tag_icon_like user problem %}
-                    {% tag_icon_rate user problem %}
-                    {% tag_icon_solve user problem %}
+                    {% container_icon_like user problem %}
+                    {% container_icon_rate user problem %}
+                    {% container_icon_solve user problem %}
                 </div>
             </div>
         </div>
     </article>
-{% endwith %}
+{% endpartialdef problem_card %}
+
+{% partialdef htmx_request %}
+    <fade-in class="opacity-0" _="on load transition my opacity to 1 over 0.2 seconds">
+        {% for problem in problems %}{% include 'a_psat/problem.html' %}{% endfor %}
+
+        <aside id="aside" hx-swap-oob="innerHTML">
+            {% include 'a_psat/_includes/_sidebar_psat.html' %}
+        </aside>
+
+        <div hx-trigger="revealed" hx-target="this" hx-swap="outerHTML"
+             hx-get="{{ next_path }}"></div>
+    </fade-in>
+{% endpartialdef htmx_request %}

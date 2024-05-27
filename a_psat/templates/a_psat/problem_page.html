@@ -1,70 +1,38 @@
 {% extends 'a_psat/_layouts/_b.html' %}
-{% load static %}
-{% load psat_icon %}
+{% load psat_templatetags %}
 
 {% block content %}
     {% partialdef problem_card inline=True %}
-        {% with p=problem %}
         <article class="card">
-            <div class="grid bg-gray-700 text-white bg-cover z-10 relative">
-                <div class="col-start-1 row-start-1 bg-opacity-40 w-full h-full
-                    {% if p.sub == '언어' %}bg-blue-600
-                    {% elif p.sub == '자료' %}bg-emerald-600
-                    {% elif p.sub == '상황' %}bg-amber-600{% endif %}">
-                </div>
-                <div class="col-start-1 row-start-1 p-4">
-                    <a class="flex items-center gap-1"
-                       href="{% url 'psat:problem' p.id %}">
-                        <span class="font-bold hover:underline">
-                            {{ p.year }}년 {{ p.exam }} {{ p.subject }} {{ p.number }}번
-                        </span>
-                    </a>
-                </div>
-            </div>
+            {% include 'a_psat/problem.html#card_header' %}
+
             <div class="flex items-center justify-end gap-2 p-4">
-                {% tag_icon_like user problem %}
-                {% tag_icon_rate user problem %}
-                {% tag_icon_solve user problem %}
+                {% container_icon_like user problem %}
+                {% container_icon_rate user problem %}
+                {% container_icon_solve user problem %}
             </div>
-            <figure class="lg:grid lg:grid-cols-2">
-                {% if p.images.tag1 == 'Preparing Image' %}
-                    <img class="max-w-[100%] mx-auto" alt="{{ p.images.tag1 }}"
-                         src="{{ p.images.name1 }}"/>
-                {% elif p.images.name2 %}
+
+            {% if problem.images.name1 == 'Preparing Image' %}
+                <figure>
+                    <img class="max-w-[100%] mx-auto" alt="{{ problem.images.name1 }}"
+                         src="{{ problem.images.path1 }}"/>
+                </figure>
+            {% else %}
+                <figure class="lg:grid lg:grid-cols-2">
                     <div class="lg:col-start-1">
-                        <img class="w-full"
-                             data-bs-toggle="modal" data-bs-target="#modalContainerPsat"
-                             alt="{{ p.images.tag1 }}" src="{{ p.images.name1 }}"/>
+                        <img class="w-full" alt="{{ problem.images.name1 }}"
+                             src="{{ problem.images.path1 }}"/>
                     </div>
                     <div class="lg:col-start-2">
-                        <img class="w-full"
-                             data-bs-toggle="modal" data-bs-target="#modalContainerPsat"
-                             alt="{{ p.images.tag2 }}" src="{{ p.images.name2 }}"/>
+                        <img class="w-full" alt="{{ problem.images.name2 }}"
+                             src="{{ problem.images.path2 }}"/>
                     </div>
-                {% else %}
-                    <img class="max-w-[100%] mx-auto"
-                         data-bs-toggle="modal" data-bs-target="#modalContainerPsat"
-                         alt="{{ p.images.tag1 }}" src="{{ p.images.name1 }}"/>
-                {% endif %}
-            </figure>
+                </figure>
+            {% endif %}
+
             <div class="p-4 pb-2">
-                <div class="flex items-center gap-2 text-sm mb-5 flex-wrap">
-                    {% for problemtag in p.problemtag_set.all %}
-                        {% if problemtag.user == user %}
-                            {% for tag in problemtag.tags.names %}
-                                <a href=""
-                                   class="bg-gray-200 rounded-full px-3 py-1 hover:bg-gray-800 hover:text-white">
-                                    {{ tag }}
-                                </a>
-                            {% endfor %}
-                        {% endif %}
-                    {% endfor %}
-                    <a class="bg-gray-500 rounded-full px-3 py-1 hover:bg-gray-800 text-white"
-                       href="{% if user.is_authenticated %}{% url 'psat:add-problem-tag' p.id %}
-                             {% else %}{% url 'account_login' %}{% endif %}">
-                        <i class="fa-solid fa-plus"></i> 태그 추가
-                    </a>
-                </div>
+                {% container_problem_tag user problem %}
+
                 <div class="flex items-center justify-between text-sm px-2">
                     <a class="font-bold hover:underline" href="">
                         {% if problem.comments.count %}
@@ -80,6 +48,5 @@
                 </div>
             </div>
         </article>
-    {% endwith %}
     {% endpartialdef problem_card %}
 {% endblock content %}
