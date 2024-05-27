@@ -7,11 +7,16 @@
     <form class="row row-cols-auto g-2 align-items-center justify-content-center"
           hx-trigger="change" hx-target="#main" hx-push-url="false"
           hx-get="{{ base_url }}">
-        <a type="button" class="btn btn-success m-1 fw-bold" hx-boost="true"
-           href="{{ base_url }}">
-            <i class="fa-solid fa-fw fa-layer-group"></i>
-            전체 문제
+        <a class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg hover:ring block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:hover:ring-blue-500 dark:hover:border-blue-500"
+           hx-boost="true"
+           href="?keyword={{ keyword }}">
+            <i class="fa-solid fa-fw fa-filter-circle-xmark"></i>
+            필터 제거
         </a>
+
+        <input id="id_data" type="hidden" name="keyword"
+               value="{{ keyword }}" placeholder="{% trans 'Enter search keyword' %}">
+
         {% for field in form %}
             <div class="my-1"
                  x-on:change="mobileSidebarOpen = false"
@@ -20,23 +25,17 @@
                     {% crispy_field field 'class' 'form-select is-invalid' %}
                 {% else %}
                     {% if field.value == None or field.value == '' %}
-                        {% crispy_field field 'class' 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500' %}
+                        {% crispy_field field 'class' 'cursor-pointer bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg hover:ring focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500' %}
                     {% else %}
-                        {% crispy_field field 'class' 'bg-gray-50 border-2 border-blue-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500' %}
+                        {% crispy_field field 'class' 'cursor-pointer bg-gray-50 border-2 border-blue-500 text-gray-900 text-sm rounded-lg hover:ring focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500' %}
                     {% endif %}
                 {% endif %}
             </div>
         {% endfor %}
-        <input id="id_data" type="hidden" name="keyword"
-               value="{{ keyword }}" placeholder="{% trans 'Enter search keyword' %}">
-        <a type="button" class="btn btn-secondary m-1 fw-bold" hx-boost="true"
-           href="{{ base_url }}?keyword={{ keyword }}">
-            <i class="fa-solid fa-fw fa-filter-circle-xmark"></i>
-            필터 제거
-        </a>
+
         <div id="filterPage" class="my-1">
             <select id="id_page" name="page"
-                    class="select bg-gray-50 border-2 border-blue-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    class="select cursor-pointer bg-gray-50 border-2 border-blue-500 text-gray-900 text-sm rounded-lg hover:ring focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     hx-target="#aside" hx-swap="innerHTML swap:0.25s"
                     hx-get="{% url 'psat:page-filter' %}">
                 {% for p in elided_page_range %}

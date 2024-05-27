@@ -12,4 +12,5 @@ urlpatterns = [
     path('like/<pk>/', psat_views.like_problem, name='like-problem'),
     path('rate/<pk>/', psat_views.rate_problem, name='rate-problem'),
     path('solve/<pk>/', psat_views.solve_problem, name='solve-problem'),
+    path('solve/<pk>/', psat_views.add_problem_tag, name='add-problem-tag'),
 ]

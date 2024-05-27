@@ -55,6 +55,7 @@ def problem_view(request, pk):
         'like_users', 'rate_users', 'solve_users',
     )
     problem = get_object_or_404(queryset, pk=pk)
+    utils.get_problem_images(problem)
     context = {
         'problem': problem
     }
@@ -127,3 +128,8 @@ def solve_problem(request, pk):
             'message': message,
         }
         return render(request, 'a_psat/snippets/solve_result.html', context)
+
+
+@login_required
+def add_problem_tag(request):
+    pass

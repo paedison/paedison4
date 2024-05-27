@@ -142,29 +142,29 @@ input[name="remember"] {
 .login .secondaryAction:hover {
     @apply text-gray-500 underline bg-white;
 }
-#id_tags {
-    margin-bottom: 1rem;
-}
-#id_tags div {
-    display: inline-block;
-    margin-right: 0.5rem;
-}
-#id_tags div label {
-    border-radius: 9999px;
-    padding: 0.5rem 1rem;
-    border: 1px solid rgb(229 231 235);
-    width: auto;
-    cursor: pointer;
-    user-select: none;
-}
-#id_tags input {
-    display: none;
-}
-#id_tags label:has(input:checked) {
-    background-color: var(--black);
-    color: white;
-    border: 1px solid var(--black);
-}
+/*#id_tags {*/
+/*    margin-bottom: 1rem;*/
+/*}*/
+/*#id_tags div {*/
+/*    display: inline-block;*/
+/*    margin-right: 0.5rem;*/
+/*}*/
+/*#id_tags div label {*/
+/*    border-radius: 9999px;*/
+/*    padding: 0.5rem 1rem;*/
+/*    border: 1px solid rgb(229 231 235);*/
+/*    width: auto;*/
+/*    cursor: pointer;*/
+/*    user-select: none;*/
+/*}*/
+/*#id_tags input {*/
+/*    display: none;*/
+/*}*/
+/*#id_tags label:has(input:checked) {*/
+/*    background-color: var(--black);*/
+/*    color: white;*/
+/*    border: 1px solid var(--black);*/
+/*}*/
 .textarea, textarea {
     margin-bottom: 1rem;
 }

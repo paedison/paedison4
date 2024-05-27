@@ -4,8 +4,8 @@
 
 {% block content %}
     {% partialdef problem_card inline=True %}
-    <article class="card">
         {% with p=problem %}
+        <article class="card">
             <div class="grid bg-gray-700 text-white bg-cover z-10 relative">
                 <div class="col-start-1 row-start-1 bg-opacity-40 w-full h-full
                     {% if p.sub == '언어' %}bg-blue-600
@@ -48,21 +48,38 @@
                 {% endif %}
             </figure>
             <div class="p-4 pb-2">
-        {% endwith %}
-            <div class="flex items-center justify-between text-sm px-2">
-                <a class="font-bold hover:underline" href="">
-                    {% if problem.comments.count %}
-                        Comments
-                        <span id="commentsCount-{{ problem.id }}"
-                              class="font-light text-gray-500 ml-1">
-                            {{ problem.comments.count }}
-                        </span>
-                    {% else %}
-                        {% if user.is_authenticated %}Add comment{% endif %}
-                    {% endif %}
-                </a>
+                <div class="flex items-center gap-2 text-sm mb-5 flex-wrap">
+                    {% for problemtag in p.problemtag_set.all %}
+                        {% if problemtag.user == user %}
+                            {% for tag in problemtag.tags.names %}
+                                <a href=""
+                                   class="bg-gray-200 rounded-full px-3 py-1 hover:bg-gray-800 hover:text-white">
+                                    {{ tag }}
+                                </a>
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                    <a class="bg-gray-500 rounded-full px-3 py-1 hover:bg-gray-800 text-white"
+                       href="{% if user.is_authenticated %}{% url 'psat:add-problem-tag' p.id %}
+                             {% else %}{% url 'account_login' %}{% endif %}">
+                        <i class="fa-solid fa-plus"></i> 태그 추가
+                    </a>
+                </div>
+                <div class="flex items-center justify-between text-sm px-2">
+                    <a class="font-bold hover:underline" href="">
+                        {% if problem.comments.count %}
+                            Comments
+                            <span id="commentsCount-{{ problem.id }}"
+                                  class="font-light text-gray-500 ml-1">
+                                {{ problem.comments.count }}
+                            </span>
+                        {% else %}
+                            {% if user.is_authenticated %}Add comment{% endif %}
+                        {% endif %}
+                    </a>
+                </div>
             </div>
-        </div>
-    </article>
+        </article>
+    {% endwith %}
     {% endpartialdef problem_card %}
 {% endblock content %}

@@ -13,7 +13,7 @@
                 x-transition:leave-start="opacity-100 scale-100"
                 x-transition:leave-end="opacity-0 scale-90"
         >{{ icon_rate|safe }}</button>
-        <modal class="fixed inset-0 px-2 z-20 overflow-hidden flex items-center justify-center"
+        <modal class="fixed inset-0 px-2 z-[999] overflow-hidden flex items-center justify-center"
              x-show="modalOpen">
             <modal-overlayer class="absolute inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
                 x-cloak x-show="modalOpen"
@@ -39,12 +39,15 @@
                         문제 난이도를 선택해주세요.
                     </h2>
                     {% with p=problem %}
-                        <div>{{ p.year }}년 {{ p.exam }} {{ p.subject }} {{ p.number }}번</div>
+                        <a class="font-bold text-gray-500 hover:underline"
+                           href="{% url 'psat:problem' p.id %}">
+                            {{ p.year }}년 {{ p.exam }} {{ p.subject }} {{ p.number }}번
+                        </a>
                     {% endwith %}
                 </modal-header>
                 <modal-body class="p-4 text-center text-base">
                     <form class="rate_button" type="button"
-                          hx-target="#problemRate{{ problem.id }}">
+                          hx-target="#problemRate{{ problem.id }}" hx-swap="innerHTML swap:0.25s">
                         <fieldset>
                             {% for i in '12345' %}
                                 <input id="rating{{ problem.id }}-{{ i }}"

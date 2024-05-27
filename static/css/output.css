@@ -1171,6 +1171,10 @@ input:checked + .toggle-bg {
   z-index: -1;
 }
 
+.z-\[999\] {
+  z-index: 999;
+}
+
 .order-1 {
   order: 1;
 }
@@ -1308,10 +1312,6 @@ input:checked + .toggle-bg {
 
 .mb-8 {
   margin-bottom: 2rem;
-}
-
-.me-1 {
-  margin-inline-end: 0.25rem;
 }
 
 .ml-1 {
@@ -1605,6 +1605,10 @@ input:checked + .toggle-bg {
 
 .max-w-\[1170px\] {
   max-width: 1170px;
+}
+
+.max-w-full {
+  max-width: 100%;
 }
 
 .max-w-md {
@@ -2470,6 +2474,17 @@ input:checked + .toggle-bg {
   outline-style: solid;
 }
 
+.ring {
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(3px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+}
+
+.ring-blue-500 {
+  --tw-ring-opacity: 1;
+  --tw-ring-color: rgb(63 131 248 / var(--tw-ring-opacity));
+}
+
 .blur {
   --tw-blur: blur(8px);
   filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
@@ -2772,35 +2787,51 @@ input[name="remember"] {
   text-decoration-line: underline;
 }
 
-#id_tags {
-  margin-bottom: 1rem;
-}
+/*#id_tags {*/
 
-#id_tags div {
-  display: inline-block;
-  margin-right: 0.5rem;
-}
+/*    margin-bottom: 1rem;*/
 
-#id_tags div label {
-  border-radius: 9999px;
-  padding: 0.5rem 1rem;
-  border: 1px solid rgb(229 231 235);
-  width: auto;
-  cursor: pointer;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
-}
+/*}*/
 
-#id_tags input {
-  display: none;
-}
+/*#id_tags div {*/
 
-#id_tags label:has(input:checked) {
-  background-color: var(--black);
-  color: white;
-  border: 1px solid var(--black);
-}
+/*    display: inline-block;*/
+
+/*    margin-right: 0.5rem;*/
+
+/*}*/
+
+/*#id_tags div label {*/
+
+/*    border-radius: 9999px;*/
+
+/*    padding: 0.5rem 1rem;*/
+
+/*    border: 1px solid rgb(229 231 235);*/
+
+/*    width: auto;*/
+
+/*    cursor: pointer;*/
+
+/*    user-select: none;*/
+
+/*}*/
+
+/*#id_tags input {*/
+
+/*    display: none;*/
+
+/*}*/
+
+/*#id_tags label:has(input:checked) {*/
+
+/*    background-color: var(--black);*/
+
+/*    color: white;*/
+
+/*    border: 1px solid var(--black);*/
+
+/*}*/
 
 .textarea, textarea {
   margin-bottom: 1rem;
@@ -3021,6 +3052,11 @@ form[action="/accounts/signup/"] ul.errorlist {
   border-color: rgb(209 213 219 / var(--tw-border-opacity));
 }
 
+.hover\:border-blue-500:hover {
+  --tw-border-opacity: 1;
+  border-color: rgb(63 131 248 / var(--tw-border-opacity));
+}
+
 .hover\:bg-blue-800:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(30 66 159 / var(--tw-bg-opacity));
@@ -3098,6 +3134,17 @@ form[action="/accounts/signup/"] ul.errorlist {
 
 .hover\:underline:hover {
   text-decoration-line: underline;
+}
+
+.hover\:ring:hover {
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(3px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+}
+
+.hover\:ring-blue-500:hover {
+  --tw-ring-opacity: 1;
+  --tw-ring-color: rgb(63 131 248 / var(--tw-ring-opacity));
 }
 
 .focus\:z-10:focus {
@@ -3218,6 +3265,11 @@ form[action="/accounts/signup/"] ul.errorlist {
   color: rgb(156 163 175 / var(--tw-placeholder-opacity));
 }
 
+.dark\:hover\:border-blue-500:hover:is(.dark *) {
+  --tw-border-opacity: 1;
+  border-color: rgb(63 131 248 / var(--tw-border-opacity));
+}
+
 .dark\:hover\:bg-blue-700:hover:is(.dark *) {
   --tw-bg-opacity: 1;
   background-color: rgb(26 86 219 / var(--tw-bg-opacity));
@@ -3251,6 +3303,11 @@ form[action="/accounts/signup/"] ul.errorlist {
 .dark\:hover\:text-white:hover:is(.dark *) {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.dark\:hover\:ring-blue-500:hover:is(.dark *) {
+  --tw-ring-opacity: 1;
+  --tw-ring-color: rgb(63 131 248 / var(--tw-ring-opacity));
 }
 
 .dark\:focus\:border-blue-500:focus:is(.dark *) {

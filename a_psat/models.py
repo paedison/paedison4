@@ -36,6 +36,9 @@ class Problem(models.Model):
     class Meta:
         ordering = ['-year', 'id']
 
+    def __str__(self):
+        return f'{self.year_ex_sub}({self.id})'
+
     @property
     def year_ex_sub(self):
         return f'{self.year}{self.ex}{self.sub}'
@@ -71,7 +74,7 @@ class ProblemOpen(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'{self.user.username}: {self.problem}'
+        return f'{self.user.username}[Open]: {self.problem}'
 
 
 class ProblemLike(models.Model):
@@ -82,7 +85,7 @@ class ProblemLike(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'{self.user.username}: {self.problem}'
+        return f'{self.user.username}[Like]: {self.problem}'
 
 
 class ProblemRate(models.Model):
@@ -100,7 +103,7 @@ class ProblemRate(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'{self.user.username}: {self.problem}'
+        return f'{self.user.username}[Rate]: {self.problem}'
 
 
 class ProblemSolve(models.Model):
@@ -119,7 +122,7 @@ class ProblemSolve(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'{self.user.username}: {self.problem}'
+        return f'{self.user.username}[Solve]: {self.problem}'
 
 
 class ProblemMemo(models.Model):
@@ -130,7 +133,7 @@ class ProblemMemo(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'{self.user.username}: {self.problem}'
+        return f'{self.user.username}[Memo]: {self.problem}'
 
 
 class ProblemTag(models.Model):
@@ -141,13 +144,12 @@ class ProblemTag(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'{self.user.username}: {self.problem}'
+        return f'{self.user.username}[Tag]: {self.problem}'
 
 
 class ProblemComment(models.Model):
     problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    tags = TaggableManager()
     title = models.TextField(max_length=100)
     comment = RichTextField(config_name='minimal')
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='reply_comments')
