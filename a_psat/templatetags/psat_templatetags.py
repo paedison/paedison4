@@ -48,7 +48,7 @@ def container_icon_solve(user: User, problem: psat_models.Problem):
 def container_problem_tag(user: User, problem: psat_models.Problem):
     tags = []
     if user in problem.tag_users.all():
-        tags = problem.problemtag_set.get(user=user).tags.names
+        tags = list(problem.problemtag_set.get(user=user).tags.names())
     return {
         'user': user,
         'problem': problem,

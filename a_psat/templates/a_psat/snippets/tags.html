@@ -1,13 +1,11 @@
-<problem-tag class="flex items-center gap-2 text-sm mb-5 flex-wrap">
-    {% for tag in tags %}
-        <a href=""
-           class="bg-gray-200 rounded-full px-3 py-1 hover:bg-gray-800 hover:text-white">
-            {{ tag }}
-        </a>
-    {% endfor %}
-    <a class="bg-gray-500 rounded-full px-3 py-1 hover:bg-gray-800 text-white"
-       href="{% if user.is_authenticated %}{% url 'psat:add-problem-tag' problem.id %}
-             {% else %}{% url 'account_login' %}{% endif %}">
-        <i class="fa-solid fa-plus"></i> 태그 추가
-    </a>
-</problem-tag>
+<div class="text-sm mb-2 px-2">
+    <input id="problemTag{{ problem.id }}" placeholder='write tags to add below'>
+    <script>
+        let tagInput{{ problem.id }} = document.querySelector('#problemTag{{ problem.id }}');
+        let tagify{{ problem.id }} = new Tagify(tagInput{{ problem.id }}, {
+            editTags: false,
+        });
+        let tagList{{ problem.id }} = {{ tags|safe }};
+        tagify{{ problem.id }}.addTags(tagList{{ problem.id }});
+    </script>
+</div>

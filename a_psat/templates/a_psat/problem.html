@@ -22,16 +22,14 @@
         {% endpartialdef card_header %}
 
         <figure>
-            <a class="cursor-pointer"
-               hx-target="#content" hx-push-url="true" hx-swap="swap:0.25s"
-               hx-get="{{ problem.get_absolute_url }}">
+            <a class="cursor-pointer" href="{{ problem.get_absolute_url }}">
                 <img class="w-full h-[200px] object-cover object-top"
                      alt="{{ problem.images.name1 }}"
                      src="{{ problem.images.path1 }}"/>
             </a>
         </figure>
 
-        <div class="p-4 pb-2">
+        <div class="px-4 pt-4">
             {% container_problem_tag user problem %}
 
             <div class="flex items-center justify-between text-sm px-2">
