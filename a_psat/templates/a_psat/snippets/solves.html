@@ -49,15 +49,15 @@
                                     {{ i }}
                                     <input id="answer{{ problem.id }}-{{ i }}" class="hidden"
                                            type="radio" name="answer" value="{{ i }}"
-                                           hx-post="{% url 'psat:solve-problem' problem.id %}">
+                                           hx-post="{{ problem.get_solve_url }}">
                                 </label>
                             {% endfor %}
-                            {% if problem.ex == '행시' or problem.ex == '입시' or problem.ex == '외시' or problem.ex == '견습' %}
+                            {% if problem.sub != '헌법' %}
                                 <label class="solve_button" for="answer{{ problem.id }}-5">
                                     5
                                     <input id="answer{{ problem.id }}-5" class="hidden"
                                            type="radio" name="answer" value="5"
-                                           hx-post="{% url 'psat:solve-problem' problem.id %}">
+                                           hx-post="{{ problem.get_solve_url }}">
                                 </label>
                             {% endif %}
                         </fieldset>
@@ -75,9 +75,9 @@
 
 {% partialdef result %}
     {% if is_correct %}
-        <span class="text-green-400">{{ message }}</span>
+        <span class="text-green-400">정답입니다.</span>
     {% else %}
-        <span class="text-red-700">{{ message }}</span>
+        <span class="text-red-700">오답입니다. 다시 풀어보세요.</span>
     {% endif %}
 
     <button id="problemSolve{{ problem.id }}" hx-swap-oob="innerHTML">

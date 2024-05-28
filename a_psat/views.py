@@ -66,16 +66,17 @@ def problem_view(request, pk):
 
 @login_required
 def like_problem(request, pk):
-    problem = get_object_or_404(psat_models.Problem, pk=pk)
-    user_exists = problem.problemlike_set.filter(user=request.user).exists()
-    if user_exists:
-        problem.like_users.remove(request.user)
-    else:
-        problem.like_users.add(
-            request.user, through_defaults={'is_liked': True})
-    icon_like = icon_set.ICON_LIKE[f'{not user_exists}']
-    like_users = problem.like_users.count()
-    return HttpResponse(f'{icon_like} {like_users}')
+    if request.method == 'POST':
+        problem = get_object_or_404(psat_models.Problem, pk=pk)
+        user_exists = problem.problemlike_set.filter(user=request.user).exists()
+        if user_exists:
+            problem.like_users.remove(request.user)
+        else:
+            problem.like_users.add(
+                request.user, through_defaults={'is_liked': True})
+        icon_like = icon_set.ICON_LIKE[f'{not user_exists}']
+        like_users = problem.like_users.count()
+        return HttpResponse(f'{icon_like} {like_users}')
 
 
 @login_required
@@ -116,18 +117,31 @@ def solve_problem(request, pk):
                 through_defaults={'answer': answer, 'is_correct': is_correct}
             )
 
-        icon_solve = icon_set.ICON_SOLVE[f'{is_correct}']
-        message = '정답입니다.' if is_correct else '오답입니다. 다시 풀어보세요.'
-
         context = {
             'problem': problem,
-            'icon_solve': icon_solve,
+            'icon_solve': icon_set.ICON_SOLVE[f'{is_correct}'],
             'is_correct': is_correct,
-            'message': message,
         }
         return render(request, 'a_psat/snippets/solves.html#result', context)
 
 
 @login_required
-def add_problem_tag(request):
-    pass
+def tag_problem_add(request, pk):
+    if request.method == 'POST':
+        tag = request.POST.get('tag')
+        problem = get_object_or_404(psat_models.Problem, pk=pk)
+        problem_tag, _ = psat_models.ProblemTag.objects.get_or_create(
+            user=request.user, problem=problem)
+        problem_tag.tags.add(tag)
+        return HttpResponse('')
+
+
+@login_required
+def tag_problem_remove(request, pk):
+    if request.method == 'POST':
+        tag = request.POST.get('tag')
+        problem = get_object_or_404(psat_models.Problem, pk=pk)
+        problem_tag, _ = psat_models.ProblemTag.objects.get_or_create(
+            user=request.user, problem=problem)
+        problem_tag.tags.remove(tag)
+        return HttpResponse('')

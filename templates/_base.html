@@ -45,6 +45,16 @@
             herotext.style.transform = `translateY(${distance * 0.7}px)`;
             herotext.style.opacity = opacity;
         });
+
+        function tagifyAction(action, tagName) {
+            let formData = new FormData();
+            formData.append('tag', tagName);
+            fetch(action, {
+                method: 'POST',
+                body: formData,
+                headers: {'X-CSRFToken': '{{ csrf_token }}'},
+            });
+        }
     </script>
 </body>
 </html>

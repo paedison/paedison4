@@ -51,7 +51,7 @@
                                 <input id="rating{{ problem.id }}-{{ i }}"
                                        type="radio" name="rating" value="{{ i|subtract:6 }}"
                                        @click="modalOpen = false"
-                                       hx-post="{% url 'psat:rate-problem' problem.id %}">
+                                       hx-post="{{ problem.get_rate_url }}">
                                 <label for="rating{{ problem.id }}-{{ i }}">
                                     <i class="fa fa-star cursor-pointer"></i>
                                 </label>

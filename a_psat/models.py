@@ -43,6 +43,21 @@ class Problem(models.Model):
     def get_absolute_url(self):
         return reverse('psat:problem', args=[self.id])
 
+    def get_like_url(self):
+        return reverse('psat:like-problem', args=[self.id])
+
+    def get_rate_url(self):
+        return reverse('psat:rate-problem', args=[self.id])
+
+    def get_solve_url(self):
+        return reverse('psat:solve-problem', args=[self.id])
+
+    def get_tag_add_url(self):
+        return reverse('psat:tag-problem-add', args=[self.id])
+
+    def get_tag_remove_url(self):
+        return reverse('psat:tag-problem-remove', args=[self.id])
+
     @property
     def year_ex_sub(self):
         return f'{self.year}{self.ex}{self.sub}'
