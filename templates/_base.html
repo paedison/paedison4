@@ -37,24 +37,5 @@
     {% include '_includes/_messages.html' %}
     {% include '_includes/_header.html' %}
     {% block layout %}{% endblock %}
-    <script>
-        window.addEventListener("scroll", function() {
-            const distance = window.scrollY
-            const herotext = document.querySelector(".herotext-anim");
-            const opacity = 1 - distance / (window.innerHeight * 0.15);
-            herotext.style.transform = `translateY(${distance * 0.7}px)`;
-            herotext.style.opacity = opacity;
-        });
-
-        function tagifyAction(action, tagName) {
-            let formData = new FormData();
-            formData.append('tag', tagName);
-            fetch(action, {
-                method: 'POST',
-                body: formData,
-                headers: {'X-CSRFToken': '{{ csrf_token }}'},
-            });
-        }
-    </script>
 </body>
 </html>

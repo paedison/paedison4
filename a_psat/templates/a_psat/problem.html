@@ -10,12 +10,9 @@
                     {% elif problem.sub == '상황' %}bg-amber-600{% endif %}">
                 </div>
                 <div class="col-start-1 row-start-1 p-4">
-                    <a class="flex items-center gap-1 cursor-pointer"
-                       hx-target="#content" hx-push-url="true" hx-swap="swap:0.25s"
-                       hx-get="{{ problem.get_absolute_url }}">
-                        <span class="font-bold hover:underline">
-                            {{ problem.full_reference }}
-                        </span>
+                    <a class="flex items-center gap-1 cursor-pointer font-bold hover:underline"
+                       href="{{ problem.get_absolute_url }}">
+                        {{ problem.full_reference }}
                     </a>
                 </div>
             </card-header>

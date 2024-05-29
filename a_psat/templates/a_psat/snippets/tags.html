@@ -5,17 +5,27 @@
         </div>
 
         <script>
-            let tagInputProblem{{ problem.id }} = document.querySelector('#problemTag{{ problem.id }}');
-            let tagifyProblem{{ problem.id }} = new Tagify(tagInputProblem{{ problem.id }}, { editTags: false });
-            tagifyProblem{{ problem.id }}.addTags({{ tags|safe }});
+            let tagInputProblem{{ view_type }}{{ problem.id }} = document.querySelector('#problemTag{{ problem.id }}')
+            let tagifyProblem{{ problem.id }} = new Tagify(tagInputProblem{{ problem.id }}, {
+                editTags: false,
+                hooks: {
+                    beforeRemoveTag : tags => {
+                        return new Promise((resolve, reject) => {
+                            confirm(`'${tags[0].data.value}' 태그를 삭제할까요?`) ? resolve() : reject()
+                        })
+                    }
+                }
+            })
+
+            tagifyProblem{{ problem.id }}.addTags({{ tags|safe }})
 
             tagifyProblem{{ problem.id }}.on('add', function(e) {
-                tagifyAction("{{ problem.get_tag_add_url }}", e.detail.data.value);
-            });
+                tagifyAction("{{ problem.get_tag_add_url }}", e.detail.data.value)
+            })
 
             tagifyProblem{{ problem.id }}.on('remove', function(e) {
-                tagifyAction("{{ problem.get_tag_remove_url }}", e.detail.data.value);
-            });
+                tagifyAction("{{ problem.get_tag_remove_url }}", e.detail.data.value)
+            })
         </script>
     {% else %}
         <div class="text-sm mb-2 px-2">
