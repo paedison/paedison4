@@ -1,65 +1,208 @@
+{% load i18n %}
 {% load static %}
 
-<header x-data="{ mobilenavOpen: false }"
-        class="md:flex items-center justify-between [&>*]:px-8 bg-gray-800 h-20 text-white sticky top-0 z-40">
-    <div class="flex items-center justify-between h-20">
-        <logo>
-            <a class="flex items-center gap-1" href="/">
-                <img class="w-6 mr-1 -mt-1" src="{% static 'images/fireheart_white.svg' %}"/>
-                <span class="text-lg font-bold">Awesome</span>
-            </a>
-        </logo>
-        <mobileicon class="md:hidden">
-            <a @click="mobilenavOpen = !mobilenavOpen"
-               class="h-12 w-12 flex items-center justify-center cursor-pointer hover:bg-gray-700 rounded-lg">
-                <img x-show="!mobilenavOpen"
-                     class="w-6 h-6 select-none" src="https://img.icons8.com/small/64/ffffff/menu.png"/>
-                <img x-show="mobilenavOpen" x-cloak
-                     class="w-6 h-6 select-none" src="https://img.icons8.com/small/64/ffffff/delete-sign.png"/>
-            </a>
-        </mobileicon>
-    </div>
-    <nav x-show="mobilenavOpen" x-cloak
-         class="md:!block bg-gray-800 h-screen w-screen md:h-auto md:w-auto -mt-20 md:mt-0 absolute md:relative z-[-1]"
-                x-transition:enter="duration-300 ease-out"
-                x-transition:enter-start="opacity-0 -translate-y-96"
-                x-transition:enter-end="opacity-100 translate-y-0">
-        <ul class="flex items-center navitems flex-col md:flex-row gap-8 md:gap-0 justify-center h-full -translate-y-10 md:translate-y-0">
-            {% if user.is_authenticated %}
-            <li><a href="/">Home</a></li>
-            <li><a href="{% url 'psat:index' %}">PSAT</a></li>
-            <li><a href="{% url 'post-create' %}">Create Post</a></li>
-            <li class="relative">
-                <div class="absolute top-2 right-0"
-                     hx-trigger="load" hx-target="this" hx-swap="innerHTML"
-                     hx-get="{% url 'notify-inbox' %}"></div>
-                <a href="{% url 'inbox' %}">Inbox</a>
-            </li>
-            <li x-data="{ dropdownOpen: false }" class="relative">
-                <a @click="dropdownOpen = !dropdownOpen" @click.away="dropdownOpen = false"
-                   class="cursor-pointer select-none">
-                    <img class="h-8 w-8 rounded-full object-cover" src="{{ user.profile.avatar }}"/>
-                    {{ user.profile.name }}
-                    <img x-bind:class="dropdownOpen && 'rotate-180 duration-300'"
-                         class="w-4" src="https://img.icons8.com/small/32/777777/expand-arrow.png"/>
+<header id="header" class="header fixed-top tw-flex tw-items-center">
+    <div class="tw-flex tw-items-center tw-justify-between">
+        <a class="logo tw-flex tw-items-center" role="banner"
+           hx-target="#main" hx-swap="innerHTML swap:0.25s"
+           hx-boost="true" data-target="#psatList"
+           href="">
+            <img src="{% static 'favicon/favicon-32x32.png' %}" alt="Logo">
+            <span class="tw-hidden sm:tw-block">Paedison</span>
+        </a>
+        <i class="fa fa-bars toggle-sidebar-btn"></i>
+    </div><!-- Logo End -->
+
+    <nav class="header-nav ms-auto">
+        <ul class="tw-flex tw-items-center">
+
+            {% if user.is_superuser %}
+                <a class="nav-link px-1" href="{% url 'admin:index' %}" target="#admin">
+                    <i class="fa-solid fa-crown fa-fw "></i>
                 </a>
-                <div x-show="dropdownOpen" x-cloak
-                     class="absolute right-0 bg-white text-black shadow rounded-lg w-40 p-2 z-20"
-                            x-transition:enter="duration-300 ease-out"
-                            x-transition:enter-start="opacity-0 -translate-y-5 scale-90"
-                            x-transition:enter-end="opacity-100 translate-y-0 scale-100">
-                    <ul class="hoverlist [&>li>a]:justify-end">
-                        <li><a href="{% url 'profile' %}">My Profile</a></li>
-                        <li><a href="{% url 'profile-edit' %}">Edit Profile</a></li>
-                        <li><a href="{% url 'account_logout' %}">Log Out</a></li>
-                    </ul>
-                </div>
-            </li>
-            {% else %}
-            <li><a href="{% url 'psat:index' %}">PSAT</a></li>
-            <li><a href="{% url 'account_login' %}">Log In</a></li>
-            <li><a href="{% url 'account_signup' %}">Sign Up</a></li>
             {% endif %}
+
+            <li class="nav-item dropdown tw-pr-3">
+                <a class="nav-link nav-profile !tw-flex tw-items-center tw-pr-0"
+                   href="" data-bs-toggle="dropdown">
+                    {% if user.is_authenticated %}
+                        <img class="tw-h-8 tw-w-8 tw-rounded-full tw-object-cover" alt="Profile"
+                             src="{{ user.profile.avatar }}"/>
+                    {% else %}
+                        <img class="tw-h-8 tw-w-8 tw-rounded-full tw-object-cover" alt="Profile"
+                             src="{% static 'image/undraw_profile.jpg' %}"/>
+                    {% endif %}
+                    <span class="tw-block dropdown-toggle tw-pl-2">{{ user.profile.name }}</span>
+                </a><!-- Profile Image Icon End -->
+
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                    {% if user.is_authenticated %}
+                        <li>
+                            <a class="dropdown-item tx-flex tw-items-center" href="{% url 'profile' %}">
+                                <i class="fa-solid fa-fw fa-user"></i> <span>My Profile</span>
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item tx-flex tw-items-center" href="{% url 'profile-edit' %}">
+                                <i class="fa-solid fa-fw fa-user"></i> <span>Edit Profile</span>
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+{#                        <li class="dropdown-item d-flex align-items-center cursor-pointer"#}
+{#                            hx-get="{% url 'dashboard:base' %}">#}
+{#                            <i class="fa-solid fa-fw fa-list"></i> <span>Dashboard</span>#}
+{#                        </li>#}
+{#                        <li><hr class="dropdown-divider"></li>#}
+                        <li>
+                            <a class="dropdown-item tx-flex tw-items-center" href="{% url 'account_logout' %}">
+                                <i class="fa-solid fa-fw fa-sign-out-alt"></i> <span>{% trans 'Logout' %}</span>
+                            </a>
+                        </li>
+                    {% else %}
+                        <li>
+                            <a class="dropdown-item tx-flex tw-items-center" href="{% url 'account_login' %}">
+                                <i class="fa-solid fa-fw fa-sign-in-alt"></i> <span>{% trans 'Login' %}</span>
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item tx-flex tw-items-center" href="{% url 'account_signup' %}">
+                                <i class="fa-solid fa-fw fa-door-open"></i> <span>{% trans 'Signup' %}</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul><!-- Profile Dropdown Items End -->
+
+{#                <a class="tw-cursor-pointer tw-select-none">#}
+{#                    <img class="tw-h-8 tw-w-8 tw-rounded-full tw-object-cover" src="{{ user.profile.avatar }}"/>#}
+{#                    {{ user.profile.name }}#}
+{#                    <img x-bind:class="dropdownOpen && 'tw-rotate-180 tw-duration-300'"#}
+{#                         class="tw-w-4" src="https://img.icons8.com/small/32/777777/expand-arrow.png"/>#}
+{#                </a>#}
+{#                {% if user.is_authenticated %}{% partial menu_authenticated %}{% endif %}#}
+{#                {% if not user.is_authenticated %}{% partial menu_anonymous %}{% endif %}#}
+            </li><!-- Profile Nav End -->
+
+{#            {% if user.is_authenticated %}#}
+{#                {% partial menu_view_type %}#}
+{#                <div class="topbar-divider"></div>#}
+{#            {% endif %}#}
+{##}
+{#            <li class="nav-item dropdown pe-3">#}
+{#                {% partial profile_image_icon %}#}
+{#                {% if user.is_authenticated %}{% partial menu_authenticated %}{% endif %}#}
+{#                {% if not user.is_authenticated %}{% partial menu_anonymous %}{% endif %}#}
+{#            </li><!-- Profile Nav End -->#}
         </ul>
-    </nav>
+    </nav><!-- Icons Navigation End -->
+
+{#    <nav x-show="mobilenavOpen" x-cloak#}
+{#         class="md:!tw-block tw-bg-gray-800 tw-h-screen tw-w-screen md:tw-h-auto md:tw-w-auto -tw-mt-20 md:tw-mt-0 tw-absolute md:tw-relative tw-z-[-1]"#}
+{#                x-transition:enter="tw-duration-300 tw-ease-out"#}
+{#                x-transition:enter-start="tw-opacity-0 -tw-translate-y-96"#}
+{#                x-transition:enter-end="tw-opacity-100 tw-translate-y-0">#}
+{#        <ul class="tw-flex tw-items-center navitems tw-flex-col md:tw-flex-row tw-gap-8 md:tw-gap-0 tw-justify-center tw-h-full -tw-translate-y-10 md:tw-translate-y-0">#}
+{#            {% if user.is_authenticated %}#}
+{#            <li><a href="/">Home</a></li>#}
+{#            <li><a href="{% url 'psat:index' %}">PSAT</a></li>#}
+{#            <li><a href="{% url 'post-create' %}">Create Post</a></li>#}
+{#            <li class="tw-relative">#}
+{#                <div class="tw-absolute tw-top-2 tw-right-0"#}
+{#                     hx-trigger="load" hx-target="this" hx-swap="innerHTML"#}
+{#                     hx-get="{% url 'notify-inbox' %}"></div>#}
+{#                <a href="{% url 'inbox' %}">Inbox</a>#}
+{#            </li>#}
+{#            <li x-data="{ dropdownOpen: false }" class="tw-relative">#}
+{#                <a @click="dropdownOpen = !dropdownOpen" @click.away="dropdownOpen = false"#}
+{#                   class="tw-cursor-pointer tw-select-none">#}
+{#                    <img class="tw-h-8 tw-w-8 tw-rounded-full tw-object-cover" src="{{ user.profile.avatar }}"/>#}
+{#                    {{ user.profile.name }}#}
+{#                    <img x-bind:class="dropdownOpen && 'tw-rotate-180 tw-duration-300'"#}
+{#                         class="tw-w-4" src="https://img.icons8.com/small/32/777777/expand-arrow.png"/>#}
+{#                </a>#}
+{#                <div x-show="dropdownOpen" x-cloak#}
+{#                     class="tw-absolute tw-right-0 tw-bg-white tw-text-black tw-shadow tw-rounded-lg tw-w-40 tw-p-2 tw-z-20"#}
+{#                            x-transition:enter="tw-duration-300 tw-ease-out"#}
+{#                            x-transition:enter-start="tw-opacity-0 -tw-translate-y-5 tw-scale-90"#}
+{#                            x-transition:enter-end="tw-opacity-100 tw-translate-y-0 tw-scale-100">#}
+{#                    <ul class="hoverlist [&>li>a]:tw-justify-end">#}
+{#                        <li><a href="{% url 'profile' %}">My Profile</a></li>#}
+{#                        <li><a href="{% url 'profile-edit' %}">Edit Profile</a></li>#}
+{#                        <li><a href="{% url 'account_logout' %}">Log Out</a></li>#}
+{#                    </ul>#}
+{#                </div>#}
+{#            </li>#}
+{#            {% else %}#}
+{#            <li><a href="{% url 'psat:index' %}">PSAT</a></li>#}
+{#            <li><a href="{% url 'account_login' %}">Log In</a></li>#}
+{#            <li><a href="{% url 'account_signup' %}">Sign Up</a></li>#}
+{#            {% endif %}#}
+{#        </ul>#}
+{#    </nav>#}
 </header>
+
+{#<header x-data="{ mobilenavOpen: false }"#}
+{#        class="md:tw-flex tw-items-center tw-justify-between [&>*]:tw-px-8#}
+{#            tw-bg-gray-800 tw-h-20 tw-sticky tw-top-0 tw-z-40">#}
+{#    <div class="tw-flex tw-items-center tw-justify-between tw-h-20">#}
+{#        <logo>#}
+{#            <a class="tw-flex tw-items-center tw-text-white tw-gap-1" href="/">#}
+{#                <img class="tw-w-6 tw-mr-1 -tw-mt-1" src="{% static 'images/fireheart_white.svg' %}"/>#}
+{#                <span class="tw-text-lg tw-font-bold">Awesome</span>#}
+{#            </a>#}
+{#        </logo>#}
+{#        <mobileicon class="md:tw-hidden">#}
+{#            <a @click="mobilenavOpen = !mobilenavOpen"#}
+{#               class="tw-h-12 tw-w-12 tw-flex tw-items-center tw-justify-center tw-cursor-pointer hover:tw-bg-gray-700 tw-rounded-lg">#}
+{#                <img x-show="!mobilenavOpen"#}
+{#                     class="tw-w-6 tw-h-6 tw-select-none" src="https://img.icons8.com/small/64/ffffff/menu.png"/>#}
+{#                <img x-show="mobilenavOpen" x-cloak#}
+{#                     class="tw-w-6 tw-h-6 tw-select-none" src="https://img.icons8.com/small/64/ffffff/delete-sign.png"/>#}
+{#            </a>#}
+{#        </mobileicon>#}
+{#    </div>#}
+{#    <nav x-show="mobilenavOpen" x-cloak#}
+{#         class="md:!tw-block tw-bg-gray-800 tw-h-screen tw-w-screen md:tw-h-auto md:tw-w-auto -tw-mt-20 md:tw-mt-0 tw-absolute md:tw-relative tw-z-[-1]"#}
+{#                x-transition:enter="tw-duration-300 tw-ease-out"#}
+{#                x-transition:enter-start="tw-opacity-0 -tw-translate-y-96"#}
+{#                x-transition:enter-end="tw-opacity-100 tw-translate-y-0">#}
+{#        <ul class="tw-flex tw-items-center navitems tw-flex-col md:tw-flex-row tw-gap-8 md:tw-gap-0 tw-justify-center tw-h-full -tw-translate-y-10 md:tw-translate-y-0">#}
+{#            {% if user.is_authenticated %}#}
+{#            <li><a href="/">Home</a></li>#}
+{#            <li><a href="{% url 'psat:index' %}">PSAT</a></li>#}
+{#            <li><a href="{% url 'post-create' %}">Create Post</a></li>#}
+{#            <li class="tw-relative">#}
+{#                <div class="tw-absolute tw-top-2 tw-right-0"#}
+{#                     hx-trigger="load" hx-target="this" hx-swap="innerHTML"#}
+{#                     hx-get="{% url 'notify-inbox' %}"></div>#}
+{#                <a href="{% url 'inbox' %}">Inbox</a>#}
+{#            </li>#}
+{#            <li x-data="{ dropdownOpen: false }" class="tw-relative">#}
+{#                <a @click="dropdownOpen = !dropdownOpen" @click.away="dropdownOpen = false"#}
+{#                   class="tw-cursor-pointer tw-select-none">#}
+{#                    <img class="tw-h-8 tw-w-8 tw-rounded-full tw-object-cover" src="{{ user.profile.avatar }}"/>#}
+{#                    {{ user.profile.name }}#}
+{#                    <img x-bind:class="dropdownOpen && 'tw-rotate-180 tw-duration-300'"#}
+{#                         class="tw-w-4" src="https://img.icons8.com/small/32/777777/expand-arrow.png"/>#}
+{#                </a>#}
+{#                <div x-show="dropdownOpen" x-cloak#}
+{#                     class="tw-absolute tw-right-0 tw-bg-white tw-text-black tw-shadow tw-rounded-lg tw-w-40 tw-p-2 tw-z-20"#}
+{#                            x-transition:enter="tw-duration-300 tw-ease-out"#}
+{#                            x-transition:enter-start="tw-opacity-0 -tw-translate-y-5 tw-scale-90"#}
+{#                            x-transition:enter-end="tw-opacity-100 tw-translate-y-0 tw-scale-100">#}
+{#                    <ul class="hoverlist [&>li>a]:tw-justify-end">#}
+{#                        <li><a href="{% url 'profile' %}">My Profile</a></li>#}
+{#                        <li><a href="{% url 'profile-edit' %}">Edit Profile</a></li>#}
+{#                        <li><a href="{% url 'account_logout' %}">Log Out</a></li>#}
+{#                    </ul>#}
+{#                </div>#}
+{#            </li>#}
+{#            {% else %}#}
+{#            <li><a href="{% url 'psat:index' %}">PSAT</a></li>#}
+{#            <li><a href="{% url 'account_login' %}">Log In</a></li>#}
+{#            <li><a href="{% url 'account_signup' %}">Sign Up</a></li>#}
+{#            {% endif %}#}
+{#        </ul>#}
+{#    </nav>#}
+{#</header>#}

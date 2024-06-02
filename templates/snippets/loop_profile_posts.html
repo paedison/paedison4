@@ -1,12 +1,12 @@
-<fade-in class="opacity-0" _="on load transition my opacity to 1 over 0.2 seconds">
-    <div class="grid place-items-start gap-x-8 max-w-xl mx-auto
-                {% if posts.count <= 1 %}grid-cols-1 max-w-xl
-                {% elif posts.count == 2 %}grid-cols-1 max-w-xl lg:grid-cols-2 lg:max-w-5xl
-                {% else %}grid-cols-1 max-w-xl lg:grid-cols-2 lg:max-w-5xl xl:grid-cols-3 xl:max-w-7xl{% endif %}">
+<fade-in class="tw-opacity-0" _="on load transition my opacity to 1 over 0.2 seconds">
+    <div class="tw-grid tw-place-items-start tw-gap-x-8 tw-max-w-xl tw-mx-auto
+                {% if posts.count <= 1 %}tw-grid-cols-1 tw-max-w-xl
+                {% elif posts.count == 2 %}tw-grid-cols-1 tw-max-w-xl lg:tw-grid-cols-2 lg:tw-max-w-5xl
+                {% else %}tw-grid-cols-1 tw-max-w-xl lg:tw-grid-cols-2 lg:tw-max-w-5xl xl:tw-grid-cols-3 xl:tw-max-w-7xl{% endif %}">
         {% for post in posts %}
             {% include 'a_posts/post.html' %}
         {% empty %}
-            <div class="w-full text-center mt-10">No posts just yet</div>
+            <div class="tw-w-full tw-text-center tw-mt-10">No posts just yet</div>
         {% endfor %}
     </div>
 </fade-in>

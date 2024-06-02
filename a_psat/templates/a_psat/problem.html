@@ -1,47 +1,65 @@
 {% load psat_templatetags %}
 
 {% partialdef problem_card inline=True %}
-    <article class="card">
+    <article class="card tw-place-self-start">
         {% partialdef card_header inline=True %}
-            <card-header class="grid bg-gray-700 text-white bg-cover z-10 relative">
-                <div class="col-start-1 row-start-1 bg-opacity-40 w-full h-full
-                    {% if problem.sub == '언어' %}bg-blue-600
-                    {% elif problem.sub == '자료' %}bg-emerald-600
-                    {% elif problem.sub == '상황' %}bg-amber-600{% endif %}">
-                </div>
-                <div class="col-start-1 row-start-1 p-4">
-                    <a class="flex items-center gap-1 cursor-pointer font-bold hover:underline"
-                       href="{{ problem.get_absolute_url }}">
-                        {{ problem.full_reference }}
-                    </a>
-                </div>
+            <card-header class="tw-z-10 tw-p-4 {{ problem.bg_color }}">
+                <a class="tw-flex tw-text-white tw-font-bold tw-cursor-pointer hover:tw-text-white"
+                   href="{{ problem.get_absolute_url }}">
+                    {{ problem.full_reference }}
+                </a>
             </card-header>
         {% endpartialdef card_header %}
 
-        <figure>
-            <a class="cursor-pointer" href="{{ problem.get_absolute_url }}">
-                <img class="w-full h-[200px] object-cover object-top"
-                     alt="{{ problem.images.name1 }}"
-                     src="{{ problem.images.path1 }}"/>
+        <figure x-data="{ openImage: false }" class="tw-relative">
+            <div class="tw-flex tw-justify-end tw-cursor-pointer tw-absolute tw-left-0 tw-top-0 tw-z-10"
+                 @click="openImage = !openImage">
+                <i class="fa-solid fa-caret-down tw-text-blue-700 tw-text-xl tw-px-3 tw-py-4"
+                   :class="openImage ? 'rotate-180' : 'rotate-0'"></i>
+            </div>
+            <a class="tw-cursor-pointer tw-grid"
+               href="{{ problem.get_absolute_url }}">
+                <div class="tw-row-start-1 tw-col-start-1">
+                    <img class="tw-w-full tw-h-[200px] tw-object-cover tw-object-top"
+                         alt="{{ problem.images.name1 }}"
+                         src="{{ problem.images.path1 }}"/>
+                </div>
+                <div class="tw-row-start-1 tw-col-start-1"
+                     x-show="openImage"
+                     x-cloak
+                     x-transition:enter="tw-transition tw-ease-in-out tw-duration-300"
+                     x-transition:enter-start="tw-opacity-0 -tw-mt-96"
+                     x-transition:enter-end="tw-opacity-100 tw-mt-0"
+                     x-transition:leave="tw-transition tw-ease-in-out tw-duration-300"
+                     x-transition:leave-start="tw-opacity-100"
+                     x-transition:leave-end="tw-opacity-0"
+                >
+                    <img class="tw-w-full tw-object-cover tw-object-top tw-transition-max-height"
+                         alt="{{ problem.images.name1 }}"
+                         src="{{ problem.images.path1 }}"/>
+                    <img class="tw-w-full tw-object-cover tw-object-top"
+                         alt="{{ problem.images.name2 }}"
+                         src="{{ problem.images.path2 }}"/>
+                </div>
             </a>
         </figure>
 
-        <div class="px-4 pt-4">
+        <div class="tw-px-4 tw-pt-4">
             {% container_problem_tag user problem %}
 
-            <div class="flex items-center justify-between text-sm px-2">
-                <a class="font-bold hover:underline" href="{% url 'psat:problem' problem.id %}">
+            <div class="tw-flex tw-items-center tw-justify-between tw-text-sm tw-px-2">
+                <a class="tw-font-bold hover:tw-underline" href="{% url 'psat:problem' problem.id %}">
                     {% if problem.comment_users.count %}
                         Comments
                         <span id="commentsCount-{{ problem.id }}"
-                              class="font-light text-gray-500 ml-1">
+                              class="tw-font-light tw-text-gray-500 tw-ml-1">
                         {{ problem.comment_users.count }}
                     </span>
                     {% else %}
                         {% if user.is_authenticated %}Add comment{% endif %}
                     {% endif %}
                 </a>
-                <div class="flex items-center gap-2 [&>a:hover]:underline">
+                <div class="tw-flex tw-items-center tw-gap-2 [&>a:hover]:tw-underline">
                     {% container_icon_like user problem %}
                     {% container_icon_rate user problem %}
                     {% container_icon_solve user problem %}
@@ -52,8 +70,11 @@
 {% endpartialdef problem_card %}
 
 {% partialdef htmx_request %}
-    <fade-in class="opacity-0" _="on load transition my opacity to 1 over 0.2 seconds">
-        {% for problem in problems %}{% include 'a_psat/problem.html' %}{% endfor %}
+    <fade-in class="tw-opacity-0 xl:tw-col-span-full xl:tw-grid xl:tw-grid-cols-2 xl:tw-gap-x-6"
+             _="on load transition my opacity to 1 over 0.2 seconds">
+        {% for problem in problems %}
+            {% partial problem_card %}
+        {% endfor %}
 
         <aside id="aside" hx-swap-oob="innerHTML">
             {% include 'a_psat/_includes/_sidebar_psat.html' %}

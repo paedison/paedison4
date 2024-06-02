@@ -85,6 +85,16 @@ class Problem(models.Model):
         path2, name2 = get_image_path_and_name(2)
         return {'path1': path1, 'path2': path2, 'name1': name1, 'name2': name2}
 
+    @property
+    def bg_color(self):
+        bg_color_dict = {
+            '헌법': 'bg_heonbeob',
+            '언어': 'bg_eoneo',
+            '자료': 'bg_jaryo',
+            '상황': 'bg_sanghwang',
+        }
+        return bg_color_dict[self.sub]
+
 
 class ProblemOpen(models.Model):
     problem = models.ForeignKey(Problem, on_delete=models.CASCADE)

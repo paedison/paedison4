@@ -2,7 +2,7 @@
 
 {% block layout %}
     <content id="content" class="htmx-fade-in htmx-fade-out">
-        <div class="max-w-full my-6 px-6"
+        <div class="tw-max-w-full tw-my-6 tw-px-6"
              x-data="{ mobileSidebarOpen: false }">
             <main id="main">
                 {% block content %}{% endblock %}
@@ -13,7 +13,7 @@
 
 {% partialdef htmx_page %}
     <hero id="hero" hx-swap-oob="#outerHTML"></hero>
-    <div class="max-w-full my-6 px-6"
+    <div class="tw-max-w-full tw-my-6 tw-px-6"
          x-data="{ mobileSidebarOpen: false }">
         <main id="main">
             {% include 'a_psat/problem_page.html#problem_card' %}

@@ -6,7 +6,7 @@
         <article class="card">
             {% include 'a_psat/problem.html#card_header' %}
 
-            <div class="flex items-center justify-end gap-2 p-4">
+            <div class="tw-flex tw-items-center tw-justify-end tw-gap-2 tw-p-4">
                 {% container_icon_like user problem %}
                 {% container_icon_rate user problem %}
                 {% container_icon_solve user problem %}
@@ -14,32 +14,32 @@
 
             {% if problem.images.name1 == 'Preparing Image' %}
                 <figure>
-                    <img class="max-w-[100%] mx-auto" alt="{{ problem.images.name1 }}"
+                    <img class="tw-max-w-[100%] tw-mx-auto" alt="{{ problem.images.name1 }}"
                          src="{{ problem.images.path1 }}"/>
                 </figure>
             {% else %}
-                <figure class="lg:grid lg:grid-cols-2">
-                    <div class="lg:col-start-1">
-                        <img class="w-full" alt="{{ problem.images.name1 }}"
+                <figure class="lg:tw-grid lg:tw-grid-cols-2">
+                    <div class="lg:tw-col-start-1">
+                        <img class="tw-w-full" alt="{{ problem.images.name1 }}"
                              src="{{ problem.images.path1 }}"/>
                     </div>
-                    <div class="lg:col-start-2">
-                        <img class="w-full" alt="{{ problem.images.name2 }}"
+                    <div class="lg:tw-col-start-2">
+                        <img class="tw-w-full" alt="{{ problem.images.name2 }}"
                              src="{{ problem.images.path2 }}"/>
                     </div>
                 </figure>
             {% endif %}
 
-            <div class="p-4 pb-2">
+            <div class="tw-p-4 tw-pb-2">
                 {% container_problem_tag user problem %}
 
-                <div class="flex items-center justify-between text-sm px-2">
-                    <a class="font-bold hover:underline" href="">
-                        {% if problem.comments.count %}
+                <div class="tw-flex tw-items-center tw-justify-between tw-text-sm tw-px-2">
+                    <a class="tw-font-bold hover:tw-underline" href="">
+                        {% if problem.comment_users.count %}
                             Comments
                             <span id="commentsCount-{{ problem.id }}"
-                                  class="font-light text-gray-500 ml-1">
-                                {{ problem.comments.count }}
+                                  class="tw-font-light tw-text-gray-500 tw-ml-1">
+                                {{ problem.comment_users.count }}
                             </span>
                         {% else %}
                             {% if user.is_authenticated %}Add comment{% endif %}
@@ -49,4 +49,32 @@
             </div>
         </article>
     {% endpartialdef problem_card %}
+
+    {% if user.is_authenticated %}
+        <div class="card !tw-pb-0 -tw-mt-3">
+            <form class="tw-flex tw-items-center tw-p-4" autocomplete="off"
+                  _="on htmx:afterRequest reset() me"
+                  hx-target="#tab-contents" hx-swap="afterbegin"
+                  hx-post="">
+                {% csrf_token %}
+                {{ comment_form.body }}
+                <button @click="open = false" class="tw-block tw-ml-2" type="submit">Submit</button>
+            </form>
+        </div>
+    {% endif %}
+
+    <div class="mb-20">
+        <div id="tabs" class="tw-ml-4 tw-flex tw-gap-1 tw-mb-4{% if not problem.comment_users.count %} tw-hidden{% endif %}"
+             _="on htmx:afterOnLoad take .selected for event.target"
+             hx-target="#tab-contents" hx-swap="innerHTML">
+            <a class="tab selected" hx-get="">Newest First</a>
+            <a class="tab" hx-get="?top">Top Comments</a>
+        </div>
+
+        <div id="tab-contents">
+            {% for comment in problem.problemcomment_set.all %}
+                {% include 'a_psat/snippets/comments.html' %}
+            {% endfor %}
+        </div>
+    </div>
 {% endblock content %}

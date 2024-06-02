@@ -8,7 +8,7 @@ register = Library()
 
 
 @register.inclusion_tag('a_psat/snippets/likes.html')
-def container_icon_like(user, problem: psat_models.Problem):
+def container_icon_like(user: User, problem: psat_models.Problem):
     user_exists = user in problem.like_users.all()
     icon_like = icon_set.ICON_LIKE[f'{user_exists}']
     return {

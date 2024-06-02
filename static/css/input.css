@@ -12,13 +12,13 @@
     --font1: 'Lobster', sans-serif;
 }
 h1 {
-    @apply text-4xl font-bold mb-4
+    @apply tw-text-4xl tw-font-bold tw-mb-4
 }
 h2 {
-    @apply text-2xl font-bold mb-3
+    @apply tw-text-2xl tw-font-bold tw-mb-3
 }
 h3 {
-    @apply text-lg font-bold
+    @apply tw-text-lg tw-font-bold
 }
 .font1 {
     font-family: var(--font1);
@@ -57,7 +57,7 @@ h3 {
     background-color: rgba(0, 0, 0, 0.05);
 }
 .navitems>li>a {
-    @apply flex items-center gap-2 h-12 px-4 hover:bg-gray-700 rounded-lg;
+    @apply tw-flex tw-items-center tw-gap-2 tw-h-12 tw-px-4 hover:tw-bg-gray-700 tw-rounded-lg;
 }
 .card {
     display: flex;
@@ -72,13 +72,13 @@ h3 {
     width: 100%;
 }
 .hoverlist>* {
-    @apply hover:bg-gray-100 rounded-md transition duration-150;
+    @apply hover:tw-bg-gray-100 tw-rounded-md tw-transition tw-duration-150;
 }
 .hoverlist>*>a {
-    @apply flex items-center p-2;
+    @apply tw-flex tw-items-center tw-p-2;
 }
 .highlight {
-    @apply !bg-indigo-100;
+    @apply !tw-bg-indigo-100;
 }
 .titleBlip {
     animation: 1s fadeIn;
@@ -124,10 +124,10 @@ input[name="remember"] {
     width: auto;
 }
 .btn-red {
-    @apply inline-flex bg-red-500;
+    @apply tw-inline-flex tw-bg-red-500;
 }
 .btn-red:hover {
-    @apply bg-red-600;
+    @apply tw-bg-red-600;
 }
 .login .secondaryAction {
     box-shadow: none;
@@ -140,7 +140,7 @@ input[name="remember"] {
     margin-bottom: 1.5rem;
 }
 .login .secondaryAction:hover {
-    @apply text-gray-500 underline bg-white;
+    @apply tw-text-gray-500 tw-underline tw-bg-white;
 }
 /*#id_tags {*/
 /*    margin-bottom: 1rem;*/
@@ -217,33 +217,33 @@ input[name="remember"] {
     transition: opacity 1s ease-out;
 }
 #profile article figure img {
-    @apply aspect-[3/2] object-cover;
+    @apply tw-aspect-[3/2] tw-object-cover;
 }
 #profile article p {
-    @apply truncate leading-normal;
+    @apply tw-truncate tw-leading-normal;
 }
 
 form[action="/accounts/signup/"] ul {
-    @apply hidden
+    @apply tw-hidden
 }
 form[action="/accounts/signup/"] ul.errorlist {
-    @apply block
+    @apply tw-block
 }
 
 .solid_heart {
-    @apply text-red-600 m-0;
+    @apply tw-text-red-600 tw-m-0;
 }
 .solid_star {
-    @apply text-yellow-300 m-0;
+    @apply tw-text-yellow-300 tw-m-0;
 }
 .answer_correct {
-    @apply text-green-600 m-0;
+    @apply tw-text-green-600 tw-m-0;
 }
 .answer_wrong {
-    @apply text-red-600 m-0;
+    @apply tw-text-red-600 tw-m-0;
 }
 .empty_heart, .empty_star, .answer_none {
-    @apply text-gray-300 m-0 cursor-pointer;
+    @apply tw-text-gray-300 tw-m-0 tw-cursor-pointer;
 }
 
 
@@ -277,9 +277,9 @@ form[action="/accounts/signup/"] ul.errorlist {
 
 /* solve button */
 .solve_button{
-    @apply bg-green-400 text-white font-bold rounded-full w-10 h-10 cursor-pointer flex items-center justify-center
-    hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-700 focus:ring-opacity-50
-    has-[:checked]:bg-green-700;
+    @apply tw-bg-green-400 tw-text-white tw-font-bold tw-rounded-full tw-w-10 tw-h-10 tw-cursor-pointer tw-flex tw-items-center tw-justify-center
+    hover:tw-bg-green-700 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-green-700 focus:tw-ring-opacity-50
+    has-[:checked]:tw-bg-green-700;
 }
 
 
@@ -298,4 +298,42 @@ form[action="/accounts/signup/"] ul.errorlist {
 
 .tagify{
     width: 100%;
+}
+
+
+.bg_heonbeob {
+    @apply tw-bg-pink-800;
+}
+.bg_eoneo {
+    @apply tw-bg-blue-800;
+}
+.bg_jaryo {
+    @apply tw-bg-emerald-800;
+}
+.bg_sanghwang {
+    @apply tw-bg-amber-800;
+}
+
+
+.rotate-180 {
+    transform: rotate(180deg);
+    transition: transform 0.3s;
+    /*transition: transform 0.3s ease-in-out;*/
+}
+.rotate-0 {
+    transform: rotate(0deg);
+    transition: transform 0.3s;
+    /*transition: transform 0.3s ease-in-out;*/
+}
+
+
+.filter_default {
+    @apply tw-cursor-pointer tw-bg-gray-50 tw-border tw-text-gray-900 tw-text-sm tw-rounded-lg
+    hover:tw-ring focus:tw-ring-blue-500 focus:tw-border-blue-500
+    tw-block tw-w-full tw-p-2.5
+    dark:tw-bg-gray-700 dark:tw-border-gray-600 dark:tw-placeholder-gray-400 dark:tw-text-white
+    dark:focus:tw-ring-blue-500 dark:focus:tw-border-blue-500;
+}
+.filter_selected {
+    @apply tw-border-2 tw-border-blue-500
 }

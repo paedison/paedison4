@@ -3,51 +3,53 @@
 {% load crispy_forms_tags %}
 {% load crispy_forms_field %}
 
-<section class="card p-4">
-    <form class="row row-cols-auto g-2 align-items-center justify-content-center"
-          hx-trigger="change" hx-target="#main" hx-push-url="false"
-          hx-get="{{ base_url }}">
-        <a class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg hover:ring block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:hover:ring-blue-500 dark:hover:border-blue-500"
-           hx-boost="true"
-           href="?keyword={{ keyword }}">
-            <i class="fa-solid fa-fw fa-filter-circle-xmark"></i>
-            필터 제거
-        </a>
+<section class="card m-0">
+    <card-header class="tw-hidden md:tw-block tw-bg-gray-500 tw-text-white tw-z-10 tw-text-center tw-font-bold tw-p-4">
+        문제 필터
+    </card-header>
+    <card-body class="tw-px-4 tw-pt-4">
+        <form class="tw-grid tw-grid-cols-2 tw-gap-2 tw-align-items-center tw-justify-content-center"
+              hx-trigger="change" hx-target="#main" hx-push-url="false"
+              hx-get="{{ base_url }}">
+            <a class="filter_default tw-col-span-full"
+               hx-boost="true"
+               href="?keyword={{ keyword }}">
+                <i class="fa-solid fa-fw fa-filter-circle-xmark"></i>
+                필터 제거
+            </a>
 
-        <input id="id_data" type="hidden" name="keyword"
-               value="{{ keyword }}" placeholder="{% trans 'Enter search keyword' %}">
+            <input id="id_data" type="hidden" name="keyword"
+                   value="{{ keyword }}" placeholder="{% trans 'Enter search keyword' %}">
 
-        {% for field in form %}
-            <div class="my-1"
-                 x-on:change="mobileSidebarOpen = false"
-                 _="on change from #{{ field.auto_id }} set #id_page.value to '1'">
-                {% if field.errors %}
-                    {% crispy_field field 'class' 'form-select is-invalid' %}
-                {% else %}
-                    {% if field.value == None or field.value == '' %}
-                        {% crispy_field field 'class' 'cursor-pointer bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg hover:ring focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500' %}
+            {% for field in form %}
+                <div _="on change from #{{ field.auto_id }} set #id_page.value to '1'">
+                    {% if field.errors %}
+                        {% crispy_field field 'class' 'form-select is-invalid' %}
                     {% else %}
-                        {% crispy_field field 'class' 'cursor-pointer bg-gray-50 border-2 border-blue-500 text-gray-900 text-sm rounded-lg hover:ring focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500' %}
+                        {% if field.value == None or field.value == '' %}
+                            {% crispy_field field 'class' 'filter_default' %}
+                        {% else %}
+                            {% crispy_field field 'class' 'filter_default filter_selected' %}
+                        {% endif %}
                     {% endif %}
-                {% endif %}
+                </div>
+            {% endfor %}
+
+            <div id="filterPage">
+                <select id="id_page" name="page" class="filter_default filter_selected"
+                        hx-target="#aside" hx-swap="innerHTML swap:0.25s"
+                        hx-get="{% url 'psat:page-filter' %}">
+                    {% for p in elided_page_range %}
+                        {% if p == '…' %}
+                            <option value="{{ p }}" disabled>{{ p }}</option>
+                        {% elif p == page %}
+                            <option value="{{ p }}" selected>{{ p }}페이지</option>
+                        {% else %}
+                            <option value="{{ p }}">{{ p }}페이지</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
             </div>
-        {% endfor %}
-
-        <div id="filterPage" class="my-1">
-            <select id="id_page" name="page"
-                    class="select cursor-pointer bg-gray-50 border-2 border-blue-500 text-gray-900 text-sm rounded-lg hover:ring focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    hx-target="#aside" hx-swap="innerHTML swap:0.25s"
-                    hx-get="{% url 'psat:page-filter' %}">
-                {% for p in elided_page_range %}
-                    {% if p == '…' %}
-                        <option value="{{ p }}" disabled>{{ p }}</option>
-                    {% elif p == page %}
-                        <option value="{{ p }}" selected>{{ p }}페이지</option>
-                    {% else %}
-                        <option value="{{ p }}">{{ p }}페이지</option>
-                    {% endif %}
-                {% endfor %}
-            </select>
-        </div>
-    </form>
+        </form>
+    </card-body>
 </section>

@@ -3,41 +3,42 @@
 {% block layout %}
     {% include '_includes/_hero.html' %}
 
-    <content id="content" class="htmx-fade-in htmx-fade-out">
-        <div class="grid grid-cols-3 max-w-7xl mx-auto md:my-6">
-            <aside-group id="aside-group" x-data="{ mobileSidebarOpen: false }"
-                         class="sticky top-20 bg-white col-span-full mb-6 z-20 px-6
-                         md:block md:bg-transparent md:px-0 md:col-span-1
-                         lg:mr-[20%] order-1 md:order-2 htmx-fade-in htmx-fade-out">
-                <a class="cursor-pointer select-none font-bold hover:bg-gray-200 md:hidden"
-                   @click="mobileSidebarOpen = !mobileSidebarOpen">
-                    <span class="flex items-center mx-auto p-6">
-                        문제 필터
-                        <img x-bind:class="mobileSidebarOpen && 'rotate-180 duration-300'"
-                             class="w-4 ml-1.5" src="https://img.icons8.com/small/32/000000/expand-arrow.png" />
-                    </span>
-                </a>
-                <aside id="aside"
-                       x-show="mobileSidebarOpen" x-cloak
-                       x-transition:enter="transition ease-in-out duration-300"
-                       x-transition:enter-start="opacity-0 -mt-96"
-                       x-transition:enter-end="opacity-100 mt-0"
-                       x-transition:leave="transition ease-in-out duration-300"
-                       x-transition:leave-start="opacity-100"
-                       x-transition:leave-end="opacity-0"
-                       class="sticky top-28 col-span-full order-1 htmx-fade-in htmx-fade-out
-                       md:!block md:pr-6 md:order-2">
-                    {% include 'a_psat/_includes/_sidebar_psat.html' %}
-                </aside>
-            </aside-group>
+    <content id="content"
+             class="htmx-fade-in htmx-fade-out tw-grid tw-grid-cols-3 md:tw-my-6 xl:tw-grid-cols-5">
+        <filter id="aside-group"
+                class="tw-sticky tw-top-[60px] tw-col-span-full tw-mb-6 tw-z-20 tw-order-1
+                htmx-fade-in htmx-fade-out
+                md:tw-block md:tw-col-span-1 md:tw-order-2">
+            <div id="accordionProblemFilter" class="accordion md:tw-hidden">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseProblemFilter" aria-expanded="true"
+                                aria-controls="collapseProblemFilter">
+                            문제 필터
+                        </button>
+                    </h2>
+                </div>
+            </div>
+            <div class="accordion tw-sticky tw-top-[84px] tw-col-span-full tw-order-1
+                 htmx-fade-in htmx-fade-out
+                 md:!tw-block md:tw-pr-6 md:tw-order-2">
+                <div class="accordion-item">
+                    <div id="collapseProblemFilter" class="accordion-collapse collapse show"
+                         data-bs-parent="#accordionProblemFilter">
+                        <div class="accordion-body p-0">
+                            {% include 'a_psat/_includes/_sidebar_psat.html' %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </filter>
 
-            <main id="main"
-                  class="col-span-full px-6 order-2
-                  md:pr-0 md:col-span-2 md:mr-[5%] md:order-1
-                  lg:mx-[10%]">
-                {% block content %}{% endblock %}
-            </main>
-
-        </div>
+        <main id="main"
+              class="tw-col-span-full tw-order-2 !tw-mt-0 !tw-pt-0 !tw-px-6
+              md:tw-pr-0 md:tw-col-span-2 md:tw-order-1
+              xl:tw-col-span-4 xl:tw-grid xl:tw-grid-cols-2 xl:tw-gap-x-6">
+            {% block content %}{% endblock %}
+        </main>
     </content>
 {% endblock layout %}

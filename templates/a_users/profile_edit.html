@@ -1,45 +1,42 @@
 {% extends '_layouts/_c.html' %}
 
 {% block content %}
-<h1 class="mb-2">Edit Profile</h1>
-<div class="text-center flex flex-col items-center">
-    <img id="avatar" class="w-36 h-36 rounded-full object-cover mb-4" src="{{ user.profile.avatar }}" />
-    <div class="text-center max-w-md">
-        <h1 id="realname">{{ user.profile.name }}</h1>
-        <div class="text-gray-400 mb-2 -mt-3">@{{ user.username }}</div>
+    <h1 class="tw-mb-2">Edit Profile</h1>
+    <div class="tw-text-center tw-flex tw-flex-col tw-items-center">
+        <img id="avatar" class="tw-w-36 tw-h-36 tw-rounded-full tw-object-cover tw-mb-4" src="{{ user.profile.avatar }}"/>
+        <div class="tw-text-center tw-max-w-md">
+            <h1 id="realname">{{ user.profile.name }}</h1>
+            <div class="tw-text-gray-400 tw-mb-2 -tw-mt-3">@{{ user.username }}</div>
+        </div>
     </div>
-</div>
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" >Submit</button>
-    <a class="button secondaryAction ml-1" href="{{ request.META.HTTP_REFERER }}">Cancel</a>
-</form>
-<a class="mt-12 hover:underline text-gray-500" href="{% url 'profile-delete' %}">Delete Profile</a>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %} {{ form.as_p }}
+        <button type="submit">Submit</button>
+        <a class="button secondaryAction tw-ml-1" href="{{ request.META.HTTP_REFERER }}">Cancel</a>
+    </form>
+    <a class="tw-mt-12 hover:tw-underline tw-text-gray-500" href="{% url 'profile-delete' %}">Delete Profile</a>
 
 
-<script>
+    <script>
+        // This updates the avatar
+        const fileInput = document.querySelector('input[type="file"]');
 
-    // This updates the avatar
-    const fileInput = document.querySelector('input[type="file"]');
+        fileInput.addEventListener("change", (event) => {
+            const file = event.target.files[0];
+            const image = document.querySelector("#avatar");
 
-    fileInput.addEventListener('change', (event) => {
-    const file = event.target.files[0];
-    const image = document.querySelector('#avatar');
+            if (file && file.type.includes("image")) {
+                const url = URL.createObjectURL(file);
+                image.src = url;
+            }
+        });
 
-    if (file && file.type.includes('image')) {
-        const url = URL.createObjectURL(file);
-        image.src = url;
-    }
-    });
+        // This updates the name
+        const realnameInput = document.getElementById("id_realname");
+        const realnameOutput = document.getElementById("realname");
 
-    // This updates the name
-    const realnameInput = document.getElementById('id_realname');
-    const realnameOutput = document.getElementById('realname');
-
-    realnameInput.addEventListener('input', (event) => {
-    realnameOutput.innerText = event.target.value;
-    });
-
-</script>
+        realnameInput.addEventListener("input", (event) => {
+            realnameOutput.innerText = event.target.value;
+        });
+    </script>
 {% endblock content %}

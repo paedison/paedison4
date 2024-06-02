@@ -1,6 +1,6 @@
 <like-problem>
     {% if user.is_authenticated %}
-        <a class="cursor-pointer htmx-fade-in htmx-fade-out"
+        <a class="tw-cursor-pointer htmx-fade-in htmx-fade-out"
            hx-target="this" hx-swap="innerHTML swap:0.25s"
            hx-post="{{ problem.get_like_url }}">
             {{ icon_like|safe }}
